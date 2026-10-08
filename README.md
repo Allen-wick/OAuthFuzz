@@ -79,12 +79,14 @@ python3 bench_overhead.py --instrumented-url http://127.0.0.1:8080
 
 ## Per-campaign evidence
 
-Every campaign directory contains: `config_used.json` (exact configuration
+Each campaign directory carries `config_used.json` (exact configuration,
 including ablation switches and seed), `start_epoch.json`, `run.log`,
-`fuzzing_summary.json`, `interesting_cases.jsonl` (sequence + overrides +
-oracle verdicts — the replay corpus), `coverage_series.jsonl` (Java live
-sampling) or `coverage_final.json` (Go endpoint measurement),
-`replay_coverage.json` (post-hoc replay result), and a `DONE` marker.
+`fuzzing_summary.json`, and a `DONE` marker. Depending on the campaign, it
+also holds `interesting_cases.jsonl` (sequence + overrides + oracle
+verdicts — the replay corpus), `coverage_final.json` (Go endpoint
+measurement), and `replay_coverage.json` (post-hoc replay result). Heavy
+working data (raw corpora beyond the recorded cases, coverage dumps,
+snapshots) is pruned after a campaign completes.
 
 ## Statistics
 
