@@ -1,0 +1,64 @@
+{
+  "name": "oauth-cxf-fuzzer",
+  "target_type": "cxf_oauth",
+  "protocol": "OAUTH",
+  "implementation": "Apache CXF rs-security-oauth2",
+  "output_dir": "out/oauth_cxf_coverage",
+  "oauth": {
+    "base_url": "http://127.0.0.1:8081",
+    "realm": "",
+    "client_id": "fuzz-client",
+    "client_secret": "fuzz-client-secret",
+    "redirect_uri": "http://127.0.0.1:7777/callback",
+    "user": "alice",
+    "password": "alice",
+    "scope": "openid read_resource"
+  },
+  "cxf_oauth": {
+    "container_name": "cxf-oauth-fuzz",
+    "image": "cxf-oauth:latest",
+    "http_port": 8081,
+    "config_dir": "./targets_manager/cxf_service/config",
+    "work_dir": "./targets_manager/cxf_service/work",
+    "startup_timeout": 180,
+    "jacoco_enabled": true,
+    "sample_path": "distribution/src/main/release/samples/jax_rs/oauth2",
+    "source_url": "https://github.com/apache/cxf.git",
+    "source_branch": "main",
+    "prefer_offline": true,
+    "offline_dir": "./targets_manager/cxf_service/cxf_offline",
+    "base_image_registries": [
+      "docker.io",
+      "docker.m.daocloud.io"
+    ],
+    "pull_retries": 2
+  },
+  "jacoco": {
+    "version": "0.8.14",
+    "work_dir": "jacoco_tools",
+    "agent_port": 6300,
+    "dump_every_n": 10,
+    "includes": [
+      "org.apache.cxf.rs.security.oauth2.services.*",
+      "org.apache.cxf.rs.security.oauth2.filters.*",
+      "org.apache.cxf.rs.security.oauth2.grants.*",
+      "org.apache.cxf.rs.security.oauth2.provider.*",
+      "org.apache.cxf.rs.security.oauth2.tokens.*",
+      "org.apache.cxf.rs.security.oauth2.utils.*"
+    ],
+    "excludes": [
+      "org.apache.cxf.rs.security.oauth2.*.*Test*",
+      "org.apache.cxf.rs.security.oauth2.common.*$*"
+    ]
+  },
+  "fuzzing": {
+    "max_iterations": 500,
+    "timeout_seconds": 3600,
+    "differential_coverage": true,
+    "baseline_refresh_every": 50,
+    "coverage_cache_ttl": 10,
+    "canonicalize_sequences": true,
+    "save_interesting_cases": true,
+    "monotonic_baseline": true
+  }
+}

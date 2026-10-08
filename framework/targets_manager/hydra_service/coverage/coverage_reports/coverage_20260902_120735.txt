@@ -1,0 +1,59 @@
+Go Coverage Report - Authelia OAuth Fuzzing
+Generated: 20260902_120735
+======================================================================
+
+Overall Coverage: 96.39%
+Mode: hybrid
+
+=== Code Coverage ===
+Statements: 2668.0/2768.0
+Packages: 0/0
+Methods: 0/0
+
+=== State-based Metrics ===
+Unique states: 40
+Response codes: [200, 302, 303, 400, 401, 404]
+Endpoints hit: 34
+Error patterns: 0
+Total executions: 10004
+
+=== Security Findings ===
+Security-relevant findings: 0
+Crash events: 0
+
+=== Endpoint Coverage ===
+  AuthCodeRedirect: 1475 hits
+  Login: 1371 hits
+  TokenExchange: 1083 hits
+  Authorize: 854 hits
+  AuthorizeNoPKCE: 708 hits
+  AuthorizeBadRedirectUri: 584 hits
+  Introspect: 542 hits
+  RevokeToken: 393 hits
+  HydraParFlood: 332 hits
+  RefreshToken: 314 hits
+  UserInfo: 292 hits
+  HydraAdminAPIProbe: 253 hits
+  HydraClientCreation: 240 hits
+  TokenExchangeWrongClient: 179 hits
+  ClientCredentials: 165 hits
+  TokenWrongClientSecret: 153 hits
+  IntrospectMalformed: 125 hits
+  UserInfoWrongToken: 122 hits
+  TokenBadCode: 117 hits
+  AuthorizeRedirectSSRF: 98 hits
+  AuthorizePKCEMethodConfusion: 91 hits
+  IntrospectEmptyToken: 82 hits
+  Consent: 80 hits
+  AuthorizeScopeAdmin: 79 hits
+  TokenExchangeNoPKCE: 72 hits
+  AuthorizePKCES256: 51 hits
+  AuthorizeHybrid: 50 hits
+  UseIDTokenAsAccess: 44 hits
+  AuthorizeScopeEscalation: 26 hits
+  AuthorizeOpenRedirect: 12 hits
+  TokenExchangeXML: 7 hits
+  PushedAuthorizationRequest: 4 hits
+  AuthorizePAR: 4 hits
+  TokenExchangeParamFlood: 2 hits
+

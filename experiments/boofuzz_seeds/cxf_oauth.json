@@ -1,0 +1,72 @@
+{
+ "authorize": {
+  "method": "GET",
+  "path_vars": {
+   "response_type": "code",
+   "client_id": "fuzz-client",
+   "redirect_uri": "http://127.0.0.1:7777/callback",
+   "scope": "openid read_resource",
+   "state": "OsAbJWf97FHfnXIljsShOCPEpPMAgTdnwsQndTlkVgc",
+   "nonce": "5f9oux58hOPuuR7snXDNplYLHiLmS0WHYkaR1lCN_dk"
+  }
+ },
+ "token": {
+  "method": "POST",
+  "form": {
+   "grant_type": "authorization_code",
+   "code": "60eca802824995906930ad8f02e5fd6ad4a05c65e45a0def5de22aeeaf0253ea",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret",
+   "redirect_uri": "http://127.0.0.1:7777/callback",
+   "code_verifier": "VERIFIER"
+  }
+ },
+ "userinfo": {
+  "method": "GET",
+  "headers": {
+   "Authorization": "Bearer eef45138f26b145dcd227eac1b6da97997c6cd93f28a7ed0e8f286ba8dde2be9"
+  }
+ },
+ "introspect": {
+  "method": "POST",
+  "form": {
+   "token": "eef45138f26b145dcd227eac1b6da97997c6cd93f28a7ed0e8f286ba8dde2be9",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "refresh": {
+  "method": "POST",
+  "form": {
+   "grant_type": "refresh_token",
+   "refresh_token": "REFRESH",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "revoke": {
+  "method": "POST",
+  "form": {
+   "token": "eef45138f26b145dcd227eac1b6da97997c6cd93f28a7ed0e8f286ba8dde2be9",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "endpoints": {
+  "authorize": "http://127.0.0.1:8081/services/oauth2/authorize",
+  "token": "http://127.0.0.1:8081/services/oauth2/token",
+  "userinfo": "http://127.0.0.1:8081/services/oidc/userinfo",
+  "introspect": "http://127.0.0.1:8081/services/oauth2/introspect",
+  "revoke": "http://127.0.0.1:8081/services/oauth2/revoke"
+ },
+ "flow_results": {
+  "Authorize": "Status303",
+  "Login": "Success",
+  "AuthCodeRedirect": "Status303",
+  "TokenExchange": "Success",
+  "UserInfo": "NotFound",
+  "Introspect": "Success",
+  "RefreshToken": "BadRequest",
+  "RevokeToken": "Success"
+ }
+}

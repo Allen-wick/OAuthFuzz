@@ -1,0 +1,61 @@
+{
+  "name": "oauth-spring-authz-fuzzer",
+  "target_type": "spring_authz",
+  "protocol": "OAUTH",
+  "implementation": "Spring Authorization Server",
+  "output_dir": "out/oauth_sas_coverage",
+  "oauth": {
+    "base_url": "http://127.0.0.1:9000",
+    "realm": "",
+    "client_id": "messaging-client",
+    "client_secret": "secret",
+    "redirect_uri": "http://127.0.0.1:8080/authorized",
+    "user": "user1",
+    "password": "password",
+    "scope": "openid profile message.read message.write"
+  },
+  "spring_authz": {
+    "container_name": "sas-fuzz",
+    "image": "sas-fuzz:latest",
+    "http_port": 9000,
+    "config_dir": "./targets_manager/spring_authz_service/config",
+    "work_dir": "./targets_manager/spring_authz_service/work",
+    "startup_timeout": 180,
+    "jacoco_enabled": true,
+    "sample_module": "samples/demo-authorizationserver",
+    "gradle_project": "samples-demo-authorizationserver",
+    "prefer_offline": true,
+    "offline_dir": "./targets_manager/spring_authz_service/offline",
+    "source_branch": "main",
+    "source_url": "https://ghproxy.com/https://github.com/spring-projects/spring-authorization-server.git",
+    "source_tarball_url": "https://codeload.github.com/spring-projects/spring-authorization-server/tar.gz/refs/heads/main",
+    "build_timeout": 3600,
+    "use_mirrors": true,
+    "gradle_distribution_mirror": "https://mirrors.cloud.tencent.com/gradle",
+    "maven_mirror": "https://maven.aliyun.com/repository/public",
+    "maven_spring_mirror": "https://maven.aliyun.com/repository/spring",
+    "maven_plugin_mirror": "https://maven.aliyun.com/repository/gradle-plugin"
+  },
+  "jacoco": {
+    "version": "0.8.14",
+    "work_dir": "jacoco_tools",
+    "agent_port": 6300,
+    "dump_every_n": 25,
+    "includes": [
+      "org.springframework.security.oauth2.server.authorization.*",
+      "org.springframework.security.oauth2.core.*",
+      "org.springframework.security.oauth2.jwt.*",
+      "org.springframework.security.web.*",
+      "sample.*"
+    ]
+  },
+  "fuzzing": {
+    "max_iterations": 4000,
+    "timeout_seconds": 14400,
+    "differential_coverage": true,
+    "baseline_refresh_every": 25,
+    "coverage_cache_ttl": 15,
+    "canonicalize_sequences": true,
+    "save_interesting_cases": false
+  }
+}

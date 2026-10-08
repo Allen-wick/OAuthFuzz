@@ -1,0 +1,290 @@
+====================================================================================================
+Authelia Security PoC Evidence Log
+Generated: 2026-07-30 18:41:49
+====================================================================================================
+
+
+====================================================================================================
+Test: V1_PAR_RESPONSE_MODE_BYPASS
+Description: Test if Pushed Authorization Requests bypass response_mode validation
+Start: 2026-07-30 18:41:49
+====================================================================================================
+
+[HTTP REQUEST] Discovery for PAR info
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0001 | Timestamp: 2026-07-30 18:41:49.400
+--------------------------------------------------------------------------------
+Method: GET
+URL: https://127.0.0.1:9091/.well-known/openid-configuration
+
+[HTTP RESPONSE] Discovery for PAR info
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0001 | Timestamp: 2026-07-30 18:41:49.403
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json; charset=utf-8
+
+Response Body:
+{
+  "issuer": "https://127.0.0.1:9091",
+  "jwks_uri": "https://127.0.0.1:9091/jwks.json",
+  "authorization_endpoint": "https://127.0.0.1:9091/api/oidc/authorization",
+  "token_endpoint": "https://127.0.0.1:9091/api/oidc/token",
+  "subject_types_supported": [
+    "public",
+    "pairwise"
+  ],
+  "response_types_supported": [
+    "code",
+    "id_token",
+    "token",
+    "id_token token",
+    "code id_token",
+    "code token",
+    "code id_token token"
+  ],
+  "grant_types_supported": [
+    "authorization_code",
+    "implicit",
+    "client_credentials",
+    "refresh_token",
+    "urn:ietf:params:oauth:grant-type:device_code"
+  ],
+  "response_modes_supported": [
+    "form_post",
+    "query",
+    "fragment",
+    "jwt",
+    "form_post.jwt",
+    "query.jwt",
+    "fragment.jwt"
+  ],
+  "scopes_supported": [
+    "offline_access",
+    "openid",
+    "profile",
+    "email",
+    "address",
+    "phone",
+    "groups"
+  ],
+  "claims_supported": [
+    "amr",
+    "aud",
+    "azp",
+    "client_id",
+    "exp",
+    "iat",
+    "iss",
+    "jti",
+    "rat",
+    "auth_time",
+    "nonce",
+    "groups",
+    "sub",
+    "name",
+    "given_name",
+    "family_name",
+    "middle_name",
+    "nickname",
+    "preferred_username",
+    "profile",
+    "picture",
+    "website",
+    "email",
+    "email_verified",
+    "alt_emails",
+    "gender",
+    "birthdate",
+    "zoneinfo",
+    "locale",
+    "phone_number",
+    "phone_number_verified",
+    "address",
+    "updated_at"
+  ],
+  "token_endpoint_auth_methods_supported": [
+    "client_secret_basic",
+    "client_secret_post",
+    "client_secret_jwt",
+    "private_key_jwt",
+    "none"
+  ],
+  "token_endpoint_auth_signing_alg_values_supported": [
+    "HS256",
+    "HS384",
+    "HS512",
+    "RS256",
+    "RS384",
+    "RS512",
+    "ES256",
+    "ES384",
+    "ES512",
+    "PS256",
+    "PS384",
+    "PS512"
+  ],
+  "introspection_endpoint": "https://127.0.0.1:9091/api/oidc/introspection",
+  "revocation_endpoint": "https://127.0.0.1:9091/api/oidc/revocation",
+  "introspection_e
+... (truncated)
+
+[HTTP REQUEST] PAR: response_mode=jwt
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0002 | Timestamp: 2026-07-30 18:41:49.403
+--------------------------------------------------------------------------------
+Method: POST
+URL: https://127.0.0.1:9091/api/oidc/pushed-authorization-request
+
+Headers:
+  Content-Type: application/x-www-form-urlencoded
+
+Request Body:
+  response_type: code
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  redirect_uri: https://127.0.0.1:7777/callback
+  scope: openid profile
+  state: oxAfRS3VIxLZ7vMf299hOQ
+  nonce: otwNaoTKlu5kyq9CUCx0TA
+  code_challenge: sliP_Kp8Sr0_VjtPG_73Fp_Jw35YN3Ta97_xLI2q_NE
+  code_challenge_method: S256
+  response_mode: jwt
+
+[HTTP RESPONSE] PAR: response_mode=jwt
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0002 | Timestamp: 2026-07-30 18:41:49.406
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json; charset=utf-8
+
+Response Body:
+{
+  "error": "unsupported_response_mode",
+  "error_description": "The authorization server does not support obtaining a response using this response mode. The 'response_mode' requested was 'jwt', but the Authorization Server or registered OAuth 2.0 client doesn't allow or support this mode."
+}
+
+[HTTP REQUEST] PAR: response_mode=fragment.jwt
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0003 | Timestamp: 2026-07-30 18:41:49.406
+--------------------------------------------------------------------------------
+Method: POST
+URL: https://127.0.0.1:9091/api/oidc/pushed-authorization-request
+
+Headers:
+  Content-Type: application/x-www-form-urlencoded
+
+Request Body:
+  response_type: code
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  redirect_uri: https://127.0.0.1:7777/callback
+  scope: openid profile
+  state: rZAd7yVSvB2MR2ksrPsO3Q
+  nonce: H864lGjd4wxQ8_AqDUGUJg
+  code_challenge: 8WW4s08zkuO2sswASFuNKqCwSkM4mX-ruJCuR_J-vmc
+  code_challenge_method: S256
+  response_mode: fragment.jwt
+
+[HTTP RESPONSE] PAR: response_mode=fragment.jwt
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0003 | Timestamp: 2026-07-30 18:41:49.409
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json; charset=utf-8
+
+Response Body:
+{
+  "error": "unsupported_response_mode",
+  "error_description": "The authorization server does not support obtaining a response using this response mode. The 'response_mode' requested was 'fragment.jwt', but the Authorization Server or registered OAuth 2.0 client doesn't allow or support this mode."
+}
+
+[HTTP REQUEST] PAR: response_mode=query.jwt
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0004 | Timestamp: 2026-07-30 18:41:49.409
+--------------------------------------------------------------------------------
+Method: POST
+URL: https://127.0.0.1:9091/api/oidc/pushed-authorization-request
+
+Headers:
+  Content-Type: application/x-www-form-urlencoded
+
+Request Body:
+  response_type: code
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  redirect_uri: https://127.0.0.1:7777/callback
+  scope: openid profile
+  state: jR_w7goZ1wCtdYjR5xh7_Q
+  nonce: BjntkUMkO2dSwMGwjQSr6w
+  code_challenge: m9UVqh6uKAOqIlgpQ3x1E68b8SnFc3qZx9bVAgTVnaI
+  code_challenge_method: S256
+  response_mode: query.jwt
+
+[HTTP RESPONSE] PAR: response_mode=query.jwt
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0004 | Timestamp: 2026-07-30 18:41:49.412
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json; charset=utf-8
+
+Response Body:
+{
+  "error": "unsupported_response_mode",
+  "error_description": "The authorization server does not support obtaining a response using this response mode. The 'response_mode' requested was 'query.jwt', but the Authorization Server or registered OAuth 2.0 client doesn't allow or support this mode."
+}
+
+[HTTP REQUEST] PAR: response_mode=form_post.jwt
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0005 | Timestamp: 2026-07-30 18:41:49.412
+--------------------------------------------------------------------------------
+Method: POST
+URL: https://127.0.0.1:9091/api/oidc/pushed-authorization-request
+
+Headers:
+  Content-Type: application/x-www-form-urlencoded
+
+Request Body:
+  response_type: code
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  redirect_uri: https://127.0.0.1:7777/callback
+  scope: openid profile
+  state: kAOYyzDwBTzuM3YvQJ8ciQ
+  nonce: DpJg42oQD0qQ6XToiwjGGQ
+  code_challenge: laqr8WDZ4H1YAEB_BgIwlegFbXzRSkWLSu-P2ke4Axw
+  code_challenge_method: S256
+  response_mode: form_post.jwt
+
+[HTTP RESPONSE] PAR: response_mode=form_post.jwt
+Request ID: REQ-V1_PAR_RESPONSE_MODE_BYPASS-0005 | Timestamp: 2026-07-30 18:41:49.415
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json; charset=utf-8
+
+Response Body:
+{
+  "error": "unsupported_response_mode",
+  "error_description": "The authorization server does not support obtaining a response using this response mode. The 'response_mode' requested was 'form_post.jwt', but the Authorization Server or registered OAuth 2.0 client doesn't allow or support this mode."
+}
+
+[SERVER LOGS - INCREMENTAL] Final logs for V1_PAR_RESPONSE_MODE_BYPASS
+--------------------------------------------------------------------------------
+
+🔴 ERRORS:
+  time="2026-07-30T10:41:49Z" level=error msg="Pushed Authorization Request failed with error: The authorization server does not support obtaining a response using this response mode. The 'response_mode' requested was 'jwt', but the Authorization Server or registered OAuth 2.0 client doesn't allow or support this mode. The registered OAuth 2.0 Client with id 'fuzz-client' does not the 'response_mode' type 'jwt'." method=POST path=/api/oidc/pushed-authorization-request remote_ip=172.17.0.1 stack="github.com/authelia/authelia/v4/internal/handlers/handler_oauth2_authorization.go:208       OAuth2PushedAuthorizationRequest\ngithub.com/authelia/authelia/v4/internal/middlewares/http_to_authelia_handler_adaptor.go:58 RegisterOpenIDConnectRoutes.NewHTTPToAutheliaHandlerAdaptor.func15\ngithub.com/authelia/authelia/v4/internal/middlewares/bridge.go:66                           RegisterOpenIDConnectRoutes.(*BridgeBuilder).Build.func2.1\ngithub.com/authelia/authelia/v4/internal/middlewares/headers.go:105                         SecurityHeadersNoStore.func1\ngithub.com/valyala/fasthttp@v1.69.0/server.go:773                                           (*RequestCtx).UserValue\ngithub.com/authelia/authelia/v4/internal/middlewares/headers.go:30                          SecurityHeadersBase.func1\ngithub.com/authelia/authelia/v4/internal/middlewares/cors.go:216                            RegisterOpenIDConnectRoutes.(*CORSPolicy).Middleware.func16\ngithub.com/fasthttp/router@v1.5.4/router.go:441                                             (*Router).Handler\ngithub.com/authelia/authelia/v4/internal/middlewares/log_request.go:14                      handlerMain.LogRequest.func30\ngithub.com/authelia/authelia/v4/internal/middlewares/errors.go:38                           RecoverPanic.func1\ngithub.com/valyala/fasthttp@v1.69.0/server.go:2465                                          (*Server).serveConn\ngithub.com/valyala/fasthttp@v1.69.0/workerpool.go:225                                       (*workerPool).workerFunc\ngithub.com/valyala/fasthttp@v1.69.0/workerpool.go:197                                       (*workerPool).getCh.func1\nruntime/asm_amd64.s:1771                                                                    goexit"
+  time="2026-07-30T10:41:49Z" level=error msg="Pushed Authorization Request failed with error: The authorization server does not support obtaining a response using this response mode. The 'response_mode' requested was 'fragment.jwt', but the Authorization Server or registered OAuth 2.0 client doesn't allow or support this mode. The registered OAuth 2.0 Client with id 'fuzz-client' does not the 'response_mode' type 'fragment.jwt'." method=POST path=/api/oidc/pushed-authorization-request remote_ip=172.17.0.1 stack="github.com/authelia/authelia/v4/internal/handlers/handler_oauth2_authorization.go:208       OAuth2PushedAuthorizationRequest\ngithub.com/authelia/authelia/v4/internal/middlewares/http_to_authelia_handler_adaptor.go:58 RegisterOpenIDConnectRoutes.NewHTTPToAutheliaHandlerAdaptor.func15\ngithub.com/authelia/authelia/v4/internal/middlewares/bridge.go:66                           RegisterOpenIDConnectRoutes.(*BridgeBuilder).Build.func2.1\ngithub.com/authelia/authelia/v4/internal/middlewares/headers.go:105                         SecurityHeadersNoStore.func1\ngithub.com/valyala/fasthttp@v1.69.0/server.go:773                                           (*RequestCtx).UserValue\ngithub.com/authelia/authelia/v4/internal/middlewares/headers.go:30                          SecurityHeadersBase.func1\ngithub.com/authelia/authelia/v4/internal/middlewares/cors.go:216                            RegisterOpenIDConnectRoutes.(*CORSPolicy).Middleware.func16\ngithub.com/fasthttp/router@v1.5.4/router.go:441                                             (*Router).Handler\ngithub.com/authelia/authelia/v4/internal/middlewares/log_request.go:14                      handlerMain.LogRequest.func30\ngithub.com/authelia/authelia/v4/internal/middlewares/errors.go:38                           RecoverPanic.func1\ngithub.com/valyala/fasthttp@v1.69.0/server.go:2465                                          (*Server).serveConn\ngithub.com/valyala/fasthttp@v1.69.0/workerpool.go:225                                       (*workerPool).workerFunc\ngithub.com/valyala/fasthttp@v1.69.0/workerpool.go:197                                       (*workerPool).getCh.func1\nruntime/asm_amd64.s:1771                                                                    goexit"
+  time="2026-07-30T10:41:49Z" level=error msg="Pushed Authorization Request failed with error: The authorization server does not support obtaining a response using this response mode. The 'response_mode' requested was 'query.jwt', but the Authorization Server or registered OAuth 2.0 client doesn't allow or support this mode. The registered OAuth 2.0 Client with id 'fuzz-client' does not the 'response_mode' type 'query.jwt'." method=POST path=/api/oidc/pushed-authorization-request remote_ip=172.17.0.1 stack="github.com/authelia/authelia/v4/internal/handlers/handler_oauth2_authorization.go:208       OAuth2PushedAuthorizationRequest\ngithub.com/authelia/authelia/v4/internal/middlewares/http_to_authelia_handler_adaptor.go:58 RegisterOpenIDConnectRoutes.NewHTTPToAutheliaHandlerAdaptor.func15\ngithub.com/authelia/authelia/v4/internal/middlewares/bridge.go:66                           RegisterOpenIDConnectRoutes.(*BridgeBuilder).Build.func2.1\ngithub.com/authelia/authelia/v4/internal/middlewares/headers.go:105                         SecurityHeadersNoStore.func1\ngithub.com/valyala/fasthttp@v1.69.0/server.go:773                                           (*RequestCtx).UserValue\ngithub.com/authelia/authelia/v4/internal/middlewares/headers.go:30                          SecurityHeadersBase.func1\ngithub.com/authelia/authelia/v4/internal/middlewares/cors.go:216                            RegisterOpenIDConnectRoutes.(*CORSPolicy).Middleware.func16\ngithub.com/fasthttp/router@v1.5.4/router.go:441                                             (*Router).Handler\ngithub.com/authelia/authelia/v4/internal/middlewares/log_request.go:14                      handlerMain.LogRequest.func30\ngithub.com/authelia/authelia/v4/internal/middlewares/errors.go:38                           RecoverPanic.func1\ngithub.com/valyala/fasthttp@v1.69.0/server.go:2465                                          (*Server).serveConn\ngithub.com/valyala/fasthttp@v1.69.0/workerpool.go:225                                       (*workerPool).workerFunc\ngithub.com/valyala/fasthttp@v1.69.0/workerpool.go:197                                       (*workerPool).getCh.func1\nruntime/asm_amd64.s:1771                                                                    goexit"
+  time="2026-07-30T10:41:49Z" level=error msg="Pushed Authorization Request failed with error: The authorization server does not support obtaining a response using this response mode. The 'response_mode' requested was 'form_post.jwt', but the Authorization Server or registered OAuth 2.0 client doesn't allow or support this mode. The registered OAuth 2.0 Client with id 'fuzz-client' does not the 'response_mode' type 'form_post.jwt'." method=POST path=/api/oidc/pushed-authorization-request remote_ip=172.17.0.1 stack="github.com/authelia/authelia/v4/internal/handlers/handler_oauth2_authorization.go:208       OAuth2PushedAuthorizationRequest\ngithub.com/authelia/authelia/v4/internal/middlewares/http_to_authelia_handler_adaptor.go:58 RegisterOpenIDConnectRoutes.NewHTTPToAutheliaHandlerAdaptor.func15\ngithub.com/authelia/authelia/v4/internal/middlewares/bridge.go:66                           RegisterOpenIDConnectRoutes.(*BridgeBuilder).Build.func2.1\ngithub.com/authelia/authelia/v4/internal/middlewares/headers.go:105                         SecurityHeadersNoStore.func1\ngithub.com/valyala/fasthttp@v1.69.0/server.go:773                                           (*RequestCtx).UserValue\ngithub.com/authelia/authelia/v4/internal/middlewares/headers.go:30                          SecurityHeadersBase.func1\ngithub.com/authelia/authelia/v4/internal/middlewares/cors.go:216                            RegisterOpenIDConnectRoutes.(*CORSPolicy).Middleware.func16\ngithub.com/fasthttp/router@v1.5.4/router.go:441                                             (*Router).Handler\ngithub.com/authelia/authelia/v4/internal/middlewares/log_request.go:14                      handlerMain.LogRequest.func30\ngithub.com/authelia/authelia/v4/internal/middlewares/errors.go:38                           RecoverPanic.func1\ngithub.com/valyala/fasthttp@v1.69.0/server.go:2465                                          (*Server).serveConn\ngithub.com/valyala/fasthttp@v1.69.0/workerpool.go:225                                       (*workerPool).workerFunc\ngithub.com/valyala/fasthttp@v1.69.0/workerpool.go:197                                       (*workerPool).getCh.func1\nruntime/asm_amd64.s:1771                                                                    goexit"
+
+[TEST RESULT] PASS
+Duration: 0.03s | Requests: 5
+
+====================================================================================================
+

@@ -1,0 +1,39 @@
+{
+  "target_type": "ory_hydra",
+  "oauth": {
+    "base_url": "http://127.0.0.1:4444",
+    "realm": "",
+    "client_id": "fuzz-client",
+    "client_secret": "fuzz-client-secret",
+    "redirect_uri": "http://127.0.0.1:7777/callback",
+    "user": "testuser",
+    "password": "testpass",
+    "scope": "openid profile email offline_access"
+  },
+  "ory_hydra": {
+    "container_name": "hydra-extra",
+    "image": "oryd/hydra:latest",
+    "admin_url": "http://127.0.0.1:4445",
+    "public_port": 4444,
+    "admin_port": 4445,
+    "health_check_url": "http://127.0.0.1:4445/health/ready",
+    "public_health_url": "http://127.0.0.1:4444/health/ready",
+    "coverage_enabled": true,
+    "coverage_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/extra/hydra_extra_cov",
+    "environment": {},
+    "external_managed": true,
+    "provision_script": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/provision_extra_hydra.sh"
+  },
+  "fuzzing": {
+    "iterations": 200,
+    "baseline_refresh_every": 25,
+    "coverage_cache_ttl": 15.0,
+    "differential_coverage": false,
+    "save_interesting_cases": true,
+    "canonicalize_sequences": true,
+    "seed": 1,
+    "budget_protocol_steps": 0,
+    "dump_every_n": 200
+  },
+  "output_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/extra/oauthfuzz_ory_hydra_s1"
+}

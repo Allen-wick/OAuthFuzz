@@ -1,0 +1,73 @@
+=== RUN   TestMaxAgeBypass
+    max_age_bypass_poc_test.go:64: 
+    max_age_bypass_poc_test.go:65: ═══════════════════════════════════════════════════════════════════
+    max_age_bypass_poc_test.go:66: PoC: V2 Session Linking Ignores OIDC max_age (Z6)
+    max_age_bypass_poc_test.go:67: V1: internal/auth/.../eventstore/auth_request.go:1629 checkVerificationTimeMaxAge
+    max_age_bypass_poc_test.go:68: V2: internal/command/auth_request.go:87 LinkSessionToAuthRequest
+    max_age_bypass_poc_test.go:69: ═══════════════════════════════════════════════════════════════════
+    max_age_bypass_poc_test.go:78: 
+    max_age_bypass_poc_test.go:79: ── Case 1: Fresh session (5 seconds old) ──
+    max_age_bypass_poc_test.go:85:   Session auth time: 11:59:55
+    max_age_bypass_poc_test.go:86:   Request time:      12:00:00
+    max_age_bypass_poc_test.go:87:   max_age:           30s
+    max_age_bypass_poc_test.go:88:   V1 check:          true (correct — within max_age window)
+    max_age_bypass_poc_test.go:89:   V2 link:           true
+    max_age_bypass_poc_test.go:90:   V1 == V2:          true
+    max_age_bypass_poc_test.go:95: 
+    max_age_bypass_poc_test.go:96: ── Case 2: Stale session (1 hour old) — THE BUG ──
+    max_age_bypass_poc_test.go:102:   Session auth time: 11:00:00 (1 hour before request)
+    max_age_bypass_poc_test.go:103:   Request time:      12:00:00
+    max_age_bypass_poc_test.go:104:   max_age:           30s
+    max_age_bypass_poc_test.go:105:   V1 check:          false (correctly REJECTS — session too old)
+    max_age_bypass_poc_test.go:106:   V2 link:           true — session linked — MaxAge ignored
+    max_age_bypass_poc_test.go:111:   ✗ BUG: V1 correctly REJECTS stale session, but V2 ACCEPTS it!
+    max_age_bypass_poc_test.go:112:     The user's 1-hour-old session bypasses max_age=30 in V2 path.
+    max_age_bypass_poc_test.go:117: 
+    max_age_bypass_poc_test.go:118: ── Case 3: Very stale session (7 days old) ──
+    max_age_bypass_poc_test.go:124:   Session auth time: May 31 12:00:00 (7 days before)
+    max_age_bypass_poc_test.go:125:   max_age:           30s
+    max_age_bypass_poc_test.go:126:   V1 check:          false (correctly REJECTS)
+    max_age_bypass_poc_test.go:127:   V2 link:           true (WRONG — 7-day-old session accepted!)
+    max_age_bypass_poc_test.go:128:   ✗ A 7-day-old session with max_age=30 is ACCEPTED by V2.
+    max_age_bypass_poc_test.go:133: 
+    max_age_bypass_poc_test.go:134: ── Case 4: max_age=1 second (extreme) ──
+    max_age_bypass_poc_test.go:141:   Session auth time: 11:50:00 (10 minutes before)
+    max_age_bypass_poc_test.go:142:   max_age:           1s
+    max_age_bypass_poc_test.go:143:   V1 check:          false (correctly REJECTS)
+    max_age_bypass_poc_test.go:144:   V2 link:           true (WRONG — 10-min-old session with max_age=1!)
+    max_age_bypass_poc_test.go:145:   ✗ Client required re-auth within 1 second, V2 ignores it entirely.
+    max_age_bypass_poc_test.go:150: 
+    max_age_bypass_poc_test.go:151: ── Case 5: max_age=nil (not specified) — correct behavior ──
+    max_age_bypass_poc_test.go:154:   V1: true, V2: true (both accept — correct, no max_age constraint)
+    max_age_bypass_poc_test.go:159: 
+    max_age_bypass_poc_test.go:160: ═══════════════════════════════════════════════════════════════════
+    max_age_bypass_poc_test.go:161: VERDICT:
+    max_age_bypass_poc_test.go:162:   V1 (checkVerificationTimeMaxAge):
+    max_age_bypass_poc_test.go:163:     5 call sites in eventstore/auth_request.go (lines 1318-1439)
+    max_age_bypass_poc_test.go:164:     Correctly enforces max_age by comparing session AuthTime
+    max_age_bypass_poc_test.go:165:     against request.CreationDate.Add(-MaxAuthAge)
+    max_age_bypass_poc_test.go:166: 
+    max_age_bypass_poc_test.go:167:   V2 (LinkSessionToAuthRequest):
+    max_age_bypass_poc_test.go:168:     command/auth_request.go:87-135
+    max_age_bypass_poc_test.go:169:     Stores MaxAge in writeModel.MaxAge (line 68)
+    max_age_bypass_poc_test.go:170:     Records AuthenticationTime() in SessionLinkedEvent (line 129)
+    max_age_bypass_poc_test.go:171:     But NEVER compares MaxAge against AuthenticationTime()
+    max_age_bypass_poc_test.go:172:     The compliance checker at token issuance also skips max_age
+    max_age_bypass_poc_test.go:173: 
+    max_age_bypass_poc_test.go:174: IMPACT:
+    max_age_bypass_poc_test.go:175:   OIDC spec §3.1.2.1: max_age specifies max elapsed seconds since
+    max_age_bypass_poc_test.go:176:   last authentication. V2 ignores this — a client requesting
+    max_age_bypass_poc_test.go:177:   max_age=1 (force re-auth) gets tokens with auth_time from days ago.
+    max_age_bypass_poc_test.go:178:   This violates OIDC Core 1.0 and enables session fixation scenarios.
+    max_age_bypass_poc_test.go:179: 
+    max_age_bypass_poc_test.go:180: FIX: In LinkSessionToAuthRequest, after sessionWriteModel.CheckIsActive(),
+    max_age_bypass_poc_test.go:181:   add: if writeModel.MaxAge != nil {
+    max_age_bypass_poc_test.go:182:     authTime := sessionWriteModel.AuthenticationTime()
+    max_age_bypass_poc_test.go:183:     if !authTime.After(writeModel.CreationDate.Add(-*writeModel.MaxAge)) {
+    max_age_bypass_poc_test.go:184:       return nil, nil, zerrors.Throw...("session auth too old for max_age")
+    max_age_bypass_poc_test.go:185:     }
+    max_age_bypass_poc_test.go:186:   }
+    max_age_bypass_poc_test.go:187: ═══════════════════════════════════════════════════════════════════
+--- PASS: TestMaxAgeBypass (0.00s)
+PASS
+ok  	maxage_poc	0.006s

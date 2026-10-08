@@ -1,0 +1,35 @@
+{
+    "target_type": "simplelogin",
+    "oauth": {
+        "base_url": "http://127.0.0.1:7777",
+        "realm": "",
+        "client_id": "fuzz-client",
+        "client_secret": "fuzz-client-secret-K8nR3mQ7",
+        "redirect_uri": "http://127.0.0.1:7778/callback",
+        "user": "fuzzuser@external.com",
+        "password": "FuzzPass2025!",
+        "scope": "profile"
+    },
+    "simplelogin": {
+        "container_name": "simplelogin-fuzz",
+        "image": "simplelogin/app-ci:latest",
+        "http_port": 7777,
+        "config_dir": "./targets_manager/simplelogin_service/config",
+        "work_dir": "./targets_manager/simplelogin_service/work",
+        "health_check_url": "http://127.0.0.1:7777/",
+        "coverage_enabled": false,
+        "coverage_dir": "./simplelogin_coverage",
+        "db_port": 54321,
+        "startup_timeout": 120,
+        "admin_email": "admin@fuzz.local",
+        "app_name": "Fuzz App"
+    },
+    "fuzzing": {
+        "iterations": 200,
+        "baseline_refresh_every": 25,
+        "coverage_cache_ttl": 15.0,
+        "differential_coverage": false,
+        "save_interesting_cases": true,
+        "canonicalize_sequences": true
+    }
+}

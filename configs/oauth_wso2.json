@@ -1,0 +1,60 @@
+{
+    "name": "oauth-wso2-fuzzer",
+    "target_type": "wso2",
+    "protocol": "OAUTH",
+    "implementation": "WSO2 Identity Server 7.0.0",
+    "output_dir": "out/oauth_wso2_coverage",
+    "exec_tmout": "10000+",
+    "oauth": {
+        "base_url": "https://127.0.0.1:9443",
+        "realm": "carbon.super",
+        "client_id": "fuzz-client",
+        "client_secret": "fuzz-client-secret",
+        "redirect_uri": "http://127.0.0.1:7777/callback",
+        "user": "admin",
+        "password": "admin",
+        "scope": "openid profile",
+        "verify_ssl": false,
+        "allow_redirect_uri_extra_param": false
+    },
+    "wso2": {
+        "image": "wso2/wso2is:7.0.0",
+        "container_name": "wso2is-fuzz",
+        "http_port": 9763,
+        "https_port": 9443,
+        "config_dir": "./targets_manager/wso2_service/config",
+        "work_dir": "./targets_manager/wso2_service/work",
+        "startup_timeout": 300,
+        "jacoco_enabled": true,
+        "admin_username": "admin",
+        "admin_password": "admin"
+    },
+    "jacoco": {
+        "version": "0.8.14",
+        "work_dir": "jacoco_tools",
+        "dump_every_n": 50,
+        "agent_port": 6300,
+        "report_dir": "coverage_reports",
+        "includes": [
+            "org.wso2.carbon.identity.oauth.*",
+            "org.wso2.carbon.identity.oauth2.*",
+            "org.wso2.carbon.identity.openidconnect.*",
+            "org.wso2.carbon.identity.application.authentication.*"
+        ],
+        "excludes": []
+    },
+    "fuzzing": {
+        "max_iterations": 2000,
+        "timeout_seconds": 86400,
+        "differential_coverage": true,
+        "mutation_strategies": [
+            "param_corruption",
+            "header_injection",
+            "url_manipulation",
+            "method_mutation",
+            "wso2_specific"
+        ],
+        "coverage_threshold": 0.1,
+        "canonicalize_sequences": true
+    }
+}

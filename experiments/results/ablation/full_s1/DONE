@@ -1,0 +1,1 @@
+{"rc": 0, "arm": "full", "seed": 1, "duration_h": 6.0, "instance": {"container": "keycloak-abl-lane1", "http_port": 28081, "agent_port": 26310, "jvm_args": ["-Xmx1536m", "-Xms512m", "-XX:+UseG1GC", "-XX:MaxGCPauseMillis=200"]}}

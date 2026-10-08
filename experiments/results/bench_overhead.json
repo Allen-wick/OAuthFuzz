@@ -1,0 +1,20 @@
+{
+  "n": 2000,
+  "plain": {
+    "n": 2000,
+    "mean_ms": 1.91,
+    "median_ms": 1.81,
+    "p95_ms": 3.06
+  },
+  "instrumented": {
+    "n": 2000,
+    "mean_ms": 1.94,
+    "median_ms": 1.81,
+    "p95_ms": 3.32
+  },
+  "overhead": {
+    "mean_rel_pct": 1.57,
+    "median_rel_pct": 0.0
+  },
+  "timestamp": 1790686482.054885
+}

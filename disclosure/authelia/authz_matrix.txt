@@ -1,0 +1,31 @@
+== A2: path normalization (host 127.0.0.1) ==
+  /public/index.html                         -> 200 Authorized(bypass)
+  /private/secret.txt                        -> 403 Forbidden(deny)
+  /public/..%2fprivate/secret.txt            -> 403 Forbidden(deny)
+  /public/../private/secret.txt              -> 403 Forbidden(deny)
+  /public/%2e%2e/private/secret.txt          -> 403 Forbidden(deny)
+  /public/..%2F..%2Fprivate/x                -> 403 Forbidden(deny)
+
+== A4: resource-regex anchoring (host 127.0.0.1, rule '^/sec' deny) ==
+  /sec               -> 403 Forbidden(deny)   (note: /section,/secretary over-match ^/sec)
+  /sec/              -> 403 Forbidden(deny)   (note: /section,/secretary over-match ^/sec)
+  /section           -> 403 Forbidden(deny)   (note: /section,/secretary over-match ^/sec)
+  /secretary         -> 403 Forbidden(deny)   (note: /section,/secretary over-match ^/sec)
+  /second/level      -> 403 Forbidden(deny)   (note: /section,/secretary over-match ^/sec)
+
+== A3: wildcard-suffix (rule '*.test' bypass; 'secure.test' deny) ==
+  host=foo.example.test       -> 200 Authorized(bypass)
+  host=a.b.example.test       -> 200 Authorized(bypass)
+  host=Foo.Example.TEST       -> 400 HTTP 400
+  host=secure.test            -> 400 HTTP 400
+  host=example.test           -> 200 Authorized(bypass)
+
+=== INTERPRETATION ===
+A2: /public/..%2fprivate and /public/../private should hit the deny rule (403)
+    if Authelia's path.Clean(decoded) resolves traversal (correct/secure).
+A4: ^/sec unanchored over-matches /section, /secretary -> deny. Operator-misconfig class.
+A3: *.test matches legit subdomains (200); case-variant fails closed (not bypass).
+  host=foo.example.com          -> 401  (expect: subdomains 401 one_factor; apex example.com 403 deny; evilexample.com 400/403 not wildcard-matched)
+  host=bar.baz.example.com      -> 401  (expect: subdomains 401 one_factor; apex example.com 403 deny; evilexample.com 400/403 not wildcard-matched)
+  host=example.com              -> 403  (expect: subdomains 401 one_factor; apex example.com 403 deny; evilexample.com 400/403 not wildcard-matched)
+  host=evilexample.com          -> 400  (expect: subdomains 401 one_factor; apex example.com 403 deny; evilexample.com 400/403 not wildcard-matched)

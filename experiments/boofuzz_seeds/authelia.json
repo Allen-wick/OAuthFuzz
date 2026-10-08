@@ -1,0 +1,72 @@
+{
+ "authorize": {
+  "method": "GET",
+  "path_vars": {
+   "response_type": "code",
+   "client_id": "fuzz-client",
+   "redirect_uri": "https://127.0.0.1:7777/callback",
+   "scope": "openid profile email",
+   "state": "OMbEhWoLE3fxFSLGElJ2E0CxfGLhPhM_xcqw2SFg3-4",
+   "nonce": "c44f76FioOt1jeXk9WwMLfGBz1HdQQKZDYcGwsuhjzc"
+  }
+ },
+ "token": {
+  "method": "POST",
+  "form": {
+   "grant_type": "authorization_code",
+   "code": "authelia_ac_f26uXI27mt2229nAesqWObjMNnRly5fSkRnHSZz_V0M.Lk8iKrXiZSH39sV2lEOMlJC7Yp0peBYSagetTDN2uLw",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret",
+   "redirect_uri": "https://127.0.0.1:7777/callback",
+   "code_verifier": "zSuCF1s6VvH_eOC3ylu44Y-Pa-zQsW_ftWtor19NdE4"
+  }
+ },
+ "userinfo": {
+  "method": "GET",
+  "headers": {
+   "Authorization": "Bearer authelia_at_NobzJOA0BbWCRSsxPyHGT4xDU4WH1UQwVHrl8Y8I880.gIMr_hhepNV1eG_JK6SYciVkmpluuWYtT5D_HWmzunE"
+  }
+ },
+ "introspect": {
+  "method": "POST",
+  "form": {
+   "token": "authelia_at_NobzJOA0BbWCRSsxPyHGT4xDU4WH1UQwVHrl8Y8I880.gIMr_hhepNV1eG_JK6SYciVkmpluuWYtT5D_HWmzunE",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "refresh": {
+  "method": "POST",
+  "form": {
+   "grant_type": "refresh_token",
+   "refresh_token": "REFRESH",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "revoke": {
+  "method": "POST",
+  "form": {
+   "token": "authelia_at_NobzJOA0BbWCRSsxPyHGT4xDU4WH1UQwVHrl8Y8I880.gIMr_hhepNV1eG_JK6SYciVkmpluuWYtT5D_HWmzunE",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "endpoints": {
+  "authorize": "http://127.0.0.1:9091/api/oidc/authorization",
+  "token": "http://127.0.0.1:9091/api/oidc/token",
+  "userinfo": "http://127.0.0.1:9091/api/oidc/userinfo",
+  "introspect": "http://127.0.0.1:9091/api/oidc/introspection",
+  "revoke": "http://127.0.0.1:9091/api/oidc/revocation"
+ },
+ "flow_results": {
+  "Authorize": "Success",
+  "Login": "Success",
+  "AuthCodeRedirect": "Status303",
+  "TokenExchange": "Success",
+  "UserInfo": "Success",
+  "Introspect": "Unauthorized",
+  "RefreshToken": "BadRequest",
+  "RevokeToken": "Unauthorized"
+ }
+}

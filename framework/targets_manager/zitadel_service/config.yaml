@@ -1,0 +1,35 @@
+Database:
+  postgres:
+    host: zitadel-postgres
+    port: 5432
+    database: zitadel
+    user:
+      username: zitadel
+      password: zitadel
+    admin:
+      username: zitadel
+      password: zitadel
+
+ExternalSecure: false
+ExternalDomain: localhost
+
+FirstInstance:
+  InstanceName: zitadel-test
+  PatPath: /zitadel_work/pat.txt
+  Org:
+    Human:
+      Username: admin
+      Password: Password1!
+      PasswordChangeRequired: false
+      Email:
+        Address: admin@example.com
+    Machine:
+      Machine:
+        Username: admin-sa
+        Name: Admin SA
+      Pat.ExpirationDate: 2099-01-01T00:00:00Z
+
+DefaultInstance:
+  Features:
+    LoginV2:
+      Required: false

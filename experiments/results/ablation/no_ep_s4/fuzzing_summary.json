@@ -1,0 +1,500 @@
+{
+  "target_type": "keycloak",
+  "fuzzing_session": {
+    "total_executions": 55290,
+    "interesting_cases": 59,
+    "mutation_count": 9547,
+    "final_coverage_percentage": 17.001917324152316,
+    "peak_coverage_percentage": 17.001917324152316,
+    "baseline_coverage_percentage": 13.568895242493506,
+    "coverage_increase": 3.4330220816588106
+  },
+  "coverage_details": {
+    "instructions_covered": 131062,
+    "instructions_total": 770866,
+    "lines_covered": 32743,
+    "lines_total": 179698,
+    "branches_covered": 6391,
+    "branches_total": 65916,
+    "methods_covered": 10246,
+    "methods_total": 47997,
+    "classes_covered": 2173,
+    "classes_total": 5483
+  },
+  "interesting_cases_summary": [
+    {
+      "case_id": 1,
+      "coverage_percentage": 15.61516528164428,
+      "status_code": "NotFound",
+      "timestamp": 1789959776.0749037,
+      "execution_count": 6
+    },
+    {
+      "case_id": 2,
+      "coverage_percentage": 15.983063204240425,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959779.3712242,
+      "execution_count": 11
+    },
+    {
+      "case_id": 3,
+      "coverage_percentage": 15.998240939411001,
+      "status_code": "Success",
+      "timestamp": 1789959786.138876,
+      "execution_count": 16
+    },
+    {
+      "case_id": 4,
+      "coverage_percentage": 16.00459742679013,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959789.3858874,
+      "execution_count": 17
+    },
+    {
+      "case_id": 5,
+      "coverage_percentage": 16.090864041221174,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959799.6891959,
+      "execution_count": 33
+    },
+    {
+      "case_id": 6,
+      "coverage_percentage": 16.094366595491305,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959803.241486,
+      "execution_count": 40
+    },
+    {
+      "case_id": 7,
+      "coverage_percentage": 16.102928394818296,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959810.214134,
+      "execution_count": 55
+    },
+    {
+      "case_id": 8,
+      "coverage_percentage": 16.107468742946246,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959813.791016,
+      "execution_count": 71
+    },
+    {
+      "case_id": 9,
+      "coverage_percentage": 16.1306893805149,
+      "status_code": "BadRequest",
+      "timestamp": 1789959817.18394,
+      "execution_count": 78
+    },
+    {
+      "case_id": 10,
+      "coverage_percentage": 16.145088770292112,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959830.8029501,
+      "execution_count": 110
+    },
+    {
+      "case_id": 11,
+      "coverage_percentage": 16.146645461078837,
+      "status_code": "NotFound",
+      "timestamp": 1789959834.3229418,
+      "execution_count": 122
+    },
+    {
+      "case_id": 12,
+      "coverage_percentage": 16.241473874836874,
+      "status_code": "NotFound",
+      "timestamp": 1789959837.6750207,
+      "execution_count": 129
+    },
+    {
+      "case_id": 13,
+      "coverage_percentage": 16.24562505026814,
+      "status_code": "Success",
+      "timestamp": 1789959841.3053956,
+      "execution_count": 150
+    },
+    {
+      "case_id": 14,
+      "coverage_percentage": 16.253927401130678,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959847.918835,
+      "execution_count": 162
+    },
+    {
+      "case_id": 15,
+      "coverage_percentage": 16.267678169746752,
+      "status_code": "BadRequest",
+      "timestamp": 1789959851.8995128,
+      "execution_count": 200
+    },
+    {
+      "case_id": 16,
+      "coverage_percentage": 16.274683278287018,
+      "status_code": "NotFound",
+      "timestamp": 1789959855.3404903,
+      "execution_count": 206
+    },
+    {
+      "case_id": 17,
+      "coverage_percentage": 16.391305363059207,
+      "status_code": "Success",
+      "timestamp": 1789959897.238672,
+      "execution_count": 354
+    },
+    {
+      "case_id": 18,
+      "coverage_percentage": 16.393899847703754,
+      "status_code": "Success",
+      "timestamp": 1789959914.0866103,
+      "execution_count": 402
+    },
+    {
+      "case_id": 19,
+      "coverage_percentage": 16.474718044381255,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959937.8747308,
+      "execution_count": 468
+    },
+    {
+      "case_id": 20,
+      "coverage_percentage": 16.48172315292152,
+      "status_code": "NotFound",
+      "timestamp": 1789959941.7944133,
+      "execution_count": 497
+    },
+    {
+      "case_id": 21,
+      "coverage_percentage": 16.48613377681724,
+      "status_code": "BadRequest",
+      "timestamp": 1789959948.8127353,
+      "execution_count": 515
+    },
+    {
+      "case_id": 22,
+      "coverage_percentage": 16.491452470338555,
+      "status_code": "Unauthorized",
+      "timestamp": 1789959960.1575124,
+      "execution_count": 602
+    },
+    {
+      "case_id": 23,
+      "coverage_percentage": 16.588615920276677,
+      "status_code": "Success",
+      "timestamp": 1789959987.8003101,
+      "execution_count": 683
+    },
+    {
+      "case_id": 24,
+      "coverage_percentage": 16.61780387252778,
+      "status_code": "Unauthorized",
+      "timestamp": 1789960024.6751432,
+      "execution_count": 817
+    },
+    {
+      "case_id": 25,
+      "coverage_percentage": 16.627014293015907,
+      "status_code": "Unauthorized",
+      "timestamp": 1789960074.5529678,
+      "execution_count": 990
+    },
+    {
+      "case_id": 26,
+      "coverage_percentage": 16.627014293015907,
+      "status_code": "Unauthorized",
+      "timestamp": 1789960126.8118095,
+      "execution_count": 1171
+    },
+    {
+      "case_id": 27,
+      "coverage_percentage": 16.720026567522762,
+      "status_code": "BadRequest",
+      "timestamp": 1789960130.1294327,
+      "execution_count": 1182
+    },
+    {
+      "case_id": 28,
+      "coverage_percentage": 16.73131257572652,
+      "status_code": "Success",
+      "timestamp": 1789960307.0978777,
+      "execution_count": 1782
+    },
+    {
+      "case_id": 29,
+      "coverage_percentage": 16.73883658119569,
+      "status_code": "Success",
+      "timestamp": 1789960575.6447034,
+      "execution_count": 2617
+    },
+    {
+      "case_id": 30,
+      "coverage_percentage": 16.791764067944364,
+      "status_code": "Unauthorized",
+      "timestamp": 1789960659.416935,
+      "execution_count": 2894
+    },
+    {
+      "case_id": 31,
+      "coverage_percentage": 16.81991422633765,
+      "status_code": "Unauthorized",
+      "timestamp": 1789960786.4015217,
+      "execution_count": 3298
+    },
+    {
+      "case_id": 32,
+      "coverage_percentage": 16.881273788181083,
+      "status_code": "Success",
+      "timestamp": 1789961196.891762,
+      "execution_count": 4494
+    },
+    {
+      "case_id": 33,
+      "coverage_percentage": 16.882960203200035,
+      "status_code": "BadRequest",
+      "timestamp": 1789961336.8024533,
+      "execution_count": 4912
+    },
+    {
+      "case_id": 34,
+      "coverage_percentage": 16.924731405977173,
+      "status_code": "Success",
+      "timestamp": 1789961431.72806,
+      "execution_count": 5204
+    },
+    {
+      "case_id": 35,
+      "coverage_percentage": 16.941336107702245,
+      "status_code": "Success",
+      "timestamp": 1789961920.6902695,
+      "execution_count": 6613
+    },
+    {
+      "case_id": 36,
+      "coverage_percentage": 16.996987803327688,
+      "status_code": "Unauthorized",
+      "timestamp": 1789962867.3824296,
+      "execution_count": 9311
+    },
+    {
+      "case_id": 37,
+      "coverage_percentage": 16.99971201220446,
+      "status_code": "BadRequest",
+      "timestamp": 1789963773.7643645,
+      "execution_count": 11720
+    },
+    {
+      "case_id": 38,
+      "coverage_percentage": 17.000101184901137,
+      "status_code": "Unauthorized",
+      "timestamp": 1789964338.86263,
+      "execution_count": 13224
+    },
+    {
+      "case_id": 39,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "Success",
+      "timestamp": 1789965520.2388868,
+      "execution_count": 16346
+    },
+    {
+      "case_id": 40,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "Success",
+      "timestamp": 1789968978.2978184,
+      "execution_count": 25338
+    },
+    {
+      "case_id": 41,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "NotFound",
+      "timestamp": 1789970081.6013532,
+      "execution_count": 28162
+    },
+    {
+      "case_id": 42,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "BadRequest",
+      "timestamp": 1789971945.084356,
+      "execution_count": 32675
+    },
+    {
+      "case_id": 43,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "Success",
+      "timestamp": 1789972533.736833,
+      "execution_count": 34124
+    },
+    {
+      "case_id": 44,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "BadRequest",
+      "timestamp": 1789972663.3960376,
+      "execution_count": 34455
+    },
+    {
+      "case_id": 45,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "NotFound",
+      "timestamp": 1789975639.91342,
+      "execution_count": 41500
+    },
+    {
+      "case_id": 46,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "Success",
+      "timestamp": 1789975769.9319477,
+      "execution_count": 41823
+    },
+    {
+      "case_id": 47,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "BadRequest",
+      "timestamp": 1789975901.7857041,
+      "execution_count": 42147
+    },
+    {
+      "case_id": 48,
+      "coverage_percentage": 17.00178759992009,
+      "status_code": "BadRequest",
+      "timestamp": 1789976525.7201018,
+      "execution_count": 43701
+    },
+    {
+      "case_id": 49,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "Success",
+      "timestamp": 1789976751.4939964,
+      "execution_count": 44295
+    },
+    {
+      "case_id": 50,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "Unauthorized",
+      "timestamp": 1789977282.0944538,
+      "execution_count": 45505
+    },
+    {
+      "case_id": 51,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "Success",
+      "timestamp": 1789977523.074341,
+      "execution_count": 46068
+    },
+    {
+      "case_id": 52,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "BadRequest",
+      "timestamp": 1789977770.0198164,
+      "execution_count": 46682
+    },
+    {
+      "case_id": 53,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "Success",
+      "timestamp": 1789978370.1915812,
+      "execution_count": 48145
+    },
+    {
+      "case_id": 54,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "BadRequest",
+      "timestamp": 1789978625.5722752,
+      "execution_count": 48756
+    },
+    {
+      "case_id": 55,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "BadRequest",
+      "timestamp": 1789979376.238571,
+      "execution_count": 50550
+    },
+    {
+      "case_id": 56,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "Success",
+      "timestamp": 1789979627.5601306,
+      "execution_count": 51131
+    },
+    {
+      "case_id": 57,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "Success",
+      "timestamp": 1789980086.1043444,
+      "execution_count": 52353
+    },
+    {
+      "case_id": 58,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "Success",
+      "timestamp": 1789980513.4682658,
+      "execution_count": 53251
+    },
+    {
+      "case_id": 59,
+      "coverage_percentage": 17.001917324152316,
+      "status_code": "NotFound",
+      "timestamp": 1789981176.4929998,
+      "execution_count": 54735
+    }
+  ],
+  "configuration": {
+    "name": "oauth-java-coverage-fuzzer",
+    "target_type": "keycloak",
+    "protocol": "OAUTH",
+    "implementation": "Keycloak",
+    "output_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/ablation/no_ep_s4",
+    "exec_tmout": "10000+",
+    "oauth": {
+      "base_url": "http://127.0.0.1:28080",
+      "realm": "fuzz",
+      "client_id": "fuzz-client",
+      "client_secret": "fuzz-client-secret",
+      "redirect_uri": "http://127.0.0.1:7777/callback",
+      "user": "testuser",
+      "password": "testpass",
+      "scope": "openid profile email",
+      "allow_redirect_uri_extra_param": false
+    },
+    "jacoco": {
+      "version": "0.8.14",
+      "work_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/ablation/no_ep_s4/jacoco",
+      "dump_every_n": 50,
+      "agent_port": 26300,
+      "report_dir": "coverage_reports",
+      "includes": [
+        "org.keycloak.*"
+      ],
+      "excludes": []
+    },
+    "fuzzing": {
+      "max_iterations": 2000,
+      "timeout_seconds": 86400,
+      "mutation_strategies": [
+        "param_corruption",
+        "header_injection",
+        "url_manipulation",
+        "method_mutation"
+      ],
+      "coverage_threshold": 0.1,
+      "canonicalize_sequences": true,
+      "seed": 4,
+      "save_interesting_cases": true,
+      "budget_protocol_steps": 0,
+      "dump_every_n": 200,
+      "disable_ep": true
+    },
+    "keycloak": {
+      "container_name": "keycloak-abl-lane0",
+      "version": "26.7.4",
+      "jvm_args": [
+        "-Xmx1536m",
+        "-Xms512m",
+        "-XX:+UseG1GC",
+        "-XX:MaxGCPauseMillis=200"
+      ],
+      "startup_timeout": 60,
+      "health_check_url": "http://127.0.0.1:28080/realms/master",
+      "host_http_port": 28080
+    }
+  },
+  "timestamp": 1789981387.630558
+}

@@ -1,0 +1,92 @@
+{
+  "organizations": [
+    {
+      "owner": "admin",
+      "name": "fuzz-org",
+      "displayName": "Fuzz Testing Organization",
+      "websiteUrl": "http://localhost:8000",
+      "favicon": "",
+      "passwordType": "plain",
+      "passwordSalt": "",
+      "countryCodes": ["US"],
+      "defaultAvatar": "",
+      "masterPassword": "",
+      "enableSoftDeletion": false,
+      "isProfilePublic": true,
+      "mfaItems": [],
+      "accountItems": []
+    }
+  ],
+  "users": [
+    {
+      "owner": "fuzz-org",
+      "name": "alice",
+      "displayName": "Alice Test",
+      "email": "alice@example.com",
+      "password": "alice",
+      "isAdmin": false,
+      "isGlobalAdmin": false,
+      "isForbidden": false,
+      "isDeleted": false,
+      "signupApplication": "app-fuzz",
+      "type": "normal-user"
+    }
+  ],
+  "applications": [
+    {
+      "owner": "admin",
+      "name": "app-fuzz",
+      "displayName": "Fuzz Test Application",
+      "logo": "",
+      "homepageUrl": "http://127.0.0.1:7777",
+      "description": "OAuth2/OIDC fuzz testing application",
+      "organization": "fuzz-org",
+      "cert": "",
+      "enablePassword": true,
+      "enableSignUp": true,
+      "enableSigninSession": true,
+      "enableAutoSignin": true,
+      "enableCodeSignin": false,
+      "enableSamlCompress": false,
+      "clientId": "fuzz-client",
+      "clientSecret": "fuzz-client-secret",
+      "redirectUris": [
+        "http://127.0.0.1:7777/callback",
+        "http://localhost:7777/callback"
+      ],
+      "tokenFormat": "JWT",
+      "expireInHours": 168,
+      "refreshExpireInHours": 168,
+      "grantTypes": [
+        "authorization_code",
+        "refresh_token",
+        "client_credentials",
+        "password"
+      ],
+      "tags": [],
+      "providers": []
+    }
+  ],
+  "certs": [],
+  "providers": [],
+  "resources": [],
+  "roles": [],
+  "permissions": [],
+  "models": [],
+  "adapters": [],
+  "enforcers": [],
+  "tokens": [],
+  "sessions": [],
+  "records": [],
+  "webhooks": [],
+  "groups": [],
+  "products": [],
+  "payments": [],
+  "plans": [],
+  "pricings": [],
+  "subscriptions": [],
+  "transactions": [],
+  "syncers": [],
+  "ldapServers": [],
+  "ldaps": []
+}

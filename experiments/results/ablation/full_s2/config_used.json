@@ -1,0 +1,59 @@
+{
+  "name": "oauth-java-coverage-fuzzer",
+  "target_type": "keycloak",
+  "protocol": "OAUTH",
+  "implementation": "Keycloak",
+  "output_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/ablation/full_s2",
+  "exec_tmout": "10000+",
+  "oauth": {
+    "base_url": "http://127.0.0.1:28080",
+    "realm": "fuzz",
+    "client_id": "fuzz-client",
+    "client_secret": "fuzz-client-secret",
+    "redirect_uri": "http://127.0.0.1:7777/callback",
+    "user": "testuser",
+    "password": "testpass",
+    "scope": "openid profile email",
+    "allow_redirect_uri_extra_param": false
+  },
+  "jacoco": {
+    "version": "0.8.14",
+    "work_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/ablation/full_s2/jacoco",
+    "dump_every_n": 50,
+    "agent_port": 26300,
+    "report_dir": "coverage_reports",
+    "includes": [
+      "org.keycloak.*"
+    ],
+    "excludes": []
+  },
+  "fuzzing": {
+    "max_iterations": 2000,
+    "timeout_seconds": 86400,
+    "mutation_strategies": [
+      "param_corruption",
+      "header_injection",
+      "url_manipulation",
+      "method_mutation"
+    ],
+    "coverage_threshold": 0.1,
+    "canonicalize_sequences": true,
+    "seed": 2,
+    "save_interesting_cases": true,
+    "budget_protocol_steps": 0,
+    "dump_every_n": 200
+  },
+  "keycloak": {
+    "container_name": "keycloak-abl-lane0",
+    "version": "26.7.4",
+    "jvm_args": [
+      "-Xmx1536m",
+      "-Xms512m",
+      "-XX:+UseG1GC",
+      "-XX:MaxGCPauseMillis=200"
+    ],
+    "startup_timeout": 60,
+    "health_check_url": "http://127.0.0.1:28080/realms/master",
+    "host_http_port": 28080
+  }
+}

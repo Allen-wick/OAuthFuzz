@@ -1,0 +1,738 @@
+{
+  "target_type": "keycloak",
+  "fuzzing_session": {
+    "total_executions": 62756,
+    "interesting_cases": 93,
+    "mutation_count": 9198,
+    "final_coverage_percentage": 16.970653784185576,
+    "peak_coverage_percentage": 16.970653784185576,
+    "baseline_coverage_percentage": 13.56240903088215,
+    "coverage_increase": 3.408244753303425
+  },
+  "coverage_details": {
+    "instructions_covered": 130821,
+    "instructions_total": 770866,
+    "lines_covered": 32695,
+    "lines_total": 179698,
+    "branches_covered": 6344,
+    "branches_total": 65916,
+    "methods_covered": 10238,
+    "methods_total": 47997,
+    "classes_covered": 2173,
+    "classes_total": 5483
+  },
+  "interesting_cases_summary": [
+    {
+      "case_id": 1,
+      "coverage_percentage": 15.563275588753427,
+      "status_code": "BadRequest",
+      "timestamp": 1789938118.5476549,
+      "execution_count": 6
+    },
+    {
+      "case_id": 2,
+      "coverage_percentage": 15.638775091909618,
+      "status_code": "BadRequest",
+      "timestamp": 1789938121.6779847,
+      "execution_count": 10
+    },
+    {
+      "case_id": 3,
+      "coverage_percentage": 15.89692631404161,
+      "status_code": "Success",
+      "timestamp": 1789938128.180951,
+      "execution_count": 15
+    },
+    {
+      "case_id": 4,
+      "coverage_percentage": 15.915736327714544,
+      "status_code": "Unauthorized",
+      "timestamp": 1789938131.1418278,
+      "execution_count": 16
+    },
+    {
+      "case_id": 5,
+      "coverage_percentage": 15.987992725065055,
+      "status_code": "Success",
+      "timestamp": 1789938134.431686,
+      "execution_count": 24
+    },
+    {
+      "case_id": 6,
+      "coverage_percentage": 16.120181717704504,
+      "status_code": "Success",
+      "timestamp": 1789938143.9407403,
+      "execution_count": 45
+    },
+    {
+      "case_id": 7,
+      "coverage_percentage": 16.1230356508135,
+      "status_code": "Status431",
+      "timestamp": 1789938147.4392729,
+      "execution_count": 57
+    },
+    {
+      "case_id": 8,
+      "coverage_percentage": 16.194254254306195,
+      "status_code": "BadRequest",
+      "timestamp": 1789938157.8188033,
+      "execution_count": 95
+    },
+    {
+      "case_id": 9,
+      "coverage_percentage": 16.257040782704127,
+      "status_code": "BadRequest",
+      "timestamp": 1789938169.309194,
+      "execution_count": 182
+    },
+    {
+      "case_id": 10,
+      "coverage_percentage": 16.281169489898375,
+      "status_code": "BadRequest",
+      "timestamp": 1789938172.8132887,
+      "execution_count": 189
+    },
+    {
+      "case_id": 11,
+      "coverage_percentage": 16.28583956225855,
+      "status_code": "BadRequest",
+      "timestamp": 1789938182.9219217,
+      "execution_count": 216
+    },
+    {
+      "case_id": 12,
+      "coverage_percentage": 16.333059182789228,
+      "status_code": "BadRequest",
+      "timestamp": 1789938217.5086937,
+      "execution_count": 322
+    },
+    {
+      "case_id": 13,
+      "coverage_percentage": 16.41387737946673,
+      "status_code": "BadRequest",
+      "timestamp": 1789938281.5720272,
+      "execution_count": 565
+    },
+    {
+      "case_id": 14,
+      "coverage_percentage": 16.418288003362452,
+      "status_code": "BadRequest",
+      "timestamp": 1789938295.5023978,
+      "execution_count": 624
+    },
+    {
+      "case_id": 15,
+      "coverage_percentage": 16.426849802689443,
+      "status_code": "BadRequest",
+      "timestamp": 1789938326.1583188,
+      "execution_count": 716
+    },
+    {
+      "case_id": 16,
+      "coverage_percentage": 16.4304820811918,
+      "status_code": "BadRequest",
+      "timestamp": 1789938349.7011077,
+      "execution_count": 789
+    },
+    {
+      "case_id": 17,
+      "coverage_percentage": 16.449032646400283,
+      "status_code": "BadRequest",
+      "timestamp": 1789938375.082292,
+      "execution_count": 943
+    },
+    {
+      "case_id": 18,
+      "coverage_percentage": 16.521418767983022,
+      "status_code": "Success",
+      "timestamp": 1789938395.9523833,
+      "execution_count": 1030
+    },
+    {
+      "case_id": 19,
+      "coverage_percentage": 16.52790497959438,
+      "status_code": "Success",
+      "timestamp": 1789938890.262238,
+      "execution_count": 2467
+    },
+    {
+      "case_id": 20,
+      "coverage_percentage": 16.534520915437962,
+      "status_code": "BadRequest",
+      "timestamp": 1789938907.5573955,
+      "execution_count": 2537
+    },
+    {
+      "case_id": 21,
+      "coverage_percentage": 16.58744840218663,
+      "status_code": "Success",
+      "timestamp": 1789939001.8103893,
+      "execution_count": 2882
+    },
+    {
+      "case_id": 22,
+      "coverage_percentage": 16.59121040492122,
+      "status_code": "BadRequest",
+      "timestamp": 1789939005.2058823,
+      "execution_count": 2886
+    },
+    {
+      "case_id": 23,
+      "coverage_percentage": 16.598215513461483,
+      "status_code": "Unauthorized",
+      "timestamp": 1789939040.2879295,
+      "execution_count": 2995
+    },
+    {
+      "case_id": 24,
+      "coverage_percentage": 16.602496413124978,
+      "status_code": "BadRequest",
+      "timestamp": 1789939161.8262935,
+      "execution_count": 3357
+    },
+    {
+      "case_id": 25,
+      "coverage_percentage": 16.615728284812146,
+      "status_code": "Unauthorized",
+      "timestamp": 1789939348.9641166,
+      "execution_count": 3869
+    },
+    {
+      "case_id": 26,
+      "coverage_percentage": 16.61910111485005,
+      "status_code": "BadRequest",
+      "timestamp": 1789939416.0276668,
+      "execution_count": 4120
+    },
+    {
+      "case_id": 27,
+      "coverage_percentage": 16.629868226124902,
+      "status_code": "BadRequest",
+      "timestamp": 1789939707.062367,
+      "execution_count": 5122
+    },
+    {
+      "case_id": 28,
+      "coverage_percentage": 16.636873334665168,
+      "status_code": "Unauthorized",
+      "timestamp": 1789939786.6516829,
+      "execution_count": 5337
+    },
+    {
+      "case_id": 29,
+      "coverage_percentage": 16.651272724442382,
+      "status_code": "BadRequest",
+      "timestamp": 1789939874.621731,
+      "execution_count": 5614
+    },
+    {
+      "case_id": 30,
+      "coverage_percentage": 16.68097957362239,
+      "status_code": "Success",
+      "timestamp": 1789940094.8061523,
+      "execution_count": 6231
+    },
+    {
+      "case_id": 31,
+      "coverage_percentage": 16.68097957362239,
+      "status_code": "Success",
+      "timestamp": 1789940105.030035,
+      "execution_count": 6260
+    },
+    {
+      "case_id": 32,
+      "coverage_percentage": 16.688244130627115,
+      "status_code": "BadRequest",
+      "timestamp": 1789940231.7013052,
+      "execution_count": 6576
+    },
+    {
+      "case_id": 33,
+      "coverage_percentage": 16.704848832352187,
+      "status_code": "BadRequest",
+      "timestamp": 1789940260.3755686,
+      "execution_count": 6690
+    },
+    {
+      "case_id": 34,
+      "coverage_percentage": 16.704848832352187,
+      "status_code": "Success",
+      "timestamp": 1789940326.0577903,
+      "execution_count": 6891
+    },
+    {
+      "case_id": 35,
+      "coverage_percentage": 16.799417797645766,
+      "status_code": "Unauthorized",
+      "timestamp": 1789940539.2787883,
+      "execution_count": 7494
+    },
+    {
+      "case_id": 36,
+      "coverage_percentage": 16.855069493271206,
+      "status_code": "BadRequest",
+      "timestamp": 1789940904.6527572,
+      "execution_count": 8693
+    },
+    {
+      "case_id": 37,
+      "coverage_percentage": 16.855069493271206,
+      "status_code": "Success",
+      "timestamp": 1789940936.5304773,
+      "execution_count": 8775
+    },
+    {
+      "case_id": 38,
+      "coverage_percentage": 16.88866806941803,
+      "status_code": "Success",
+      "timestamp": 1789940940.068704,
+      "execution_count": 8783
+    },
+    {
+      "case_id": 39,
+      "coverage_percentage": 16.930439272195166,
+      "status_code": "BadRequest",
+      "timestamp": 1789940950.6849258,
+      "execution_count": 8793
+    },
+    {
+      "case_id": 40,
+      "coverage_percentage": 16.93497962032312,
+      "status_code": "Success",
+      "timestamp": 1789940965.2462206,
+      "execution_count": 8829
+    },
+    {
+      "case_id": 41,
+      "coverage_percentage": 16.93887134728993,
+      "status_code": "Unauthorized",
+      "timestamp": 1789941611.2478757,
+      "execution_count": 10745
+    },
+    {
+      "case_id": 42,
+      "coverage_percentage": 16.93887134728993,
+      "status_code": "Success",
+      "timestamp": 1789942563.6771972,
+      "execution_count": 13316
+    },
+    {
+      "case_id": 43,
+      "coverage_percentage": 16.93887134728993,
+      "status_code": "Success",
+      "timestamp": 1789942928.4688103,
+      "execution_count": 14282
+    },
+    {
+      "case_id": 44,
+      "coverage_percentage": 16.93887134728993,
+      "status_code": "Success",
+      "timestamp": 1789943157.3158855,
+      "execution_count": 14905
+    },
+    {
+      "case_id": 45,
+      "coverage_percentage": 16.93939024421884,
+      "status_code": "Success",
+      "timestamp": 1789944491.980962,
+      "execution_count": 18691
+    },
+    {
+      "case_id": 46,
+      "coverage_percentage": 16.960924466768542,
+      "status_code": "Success",
+      "timestamp": 1789944496.1302173,
+      "execution_count": 18722
+    },
+    {
+      "case_id": 47,
+      "coverage_percentage": 16.960924466768542,
+      "status_code": "Success",
+      "timestamp": 1789944695.1481583,
+      "execution_count": 19330
+    },
+    {
+      "case_id": 48,
+      "coverage_percentage": 16.96961599032776,
+      "status_code": "BadRequest",
+      "timestamp": 1789945098.0527084,
+      "execution_count": 20447
+    },
+    {
+      "case_id": 49,
+      "coverage_percentage": 16.96961599032776,
+      "status_code": "Success",
+      "timestamp": 1789945289.3337333,
+      "execution_count": 20921
+    },
+    {
+      "case_id": 50,
+      "coverage_percentage": 16.96961599032776,
+      "status_code": "BadRequest",
+      "timestamp": 1789945878.191719,
+      "execution_count": 22572
+    },
+    {
+      "case_id": 51,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "BadRequest",
+      "timestamp": 1789945992.7268844,
+      "execution_count": 22872
+    },
+    {
+      "case_id": 52,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789946000.7600205,
+      "execution_count": 22904
+    },
+    {
+      "case_id": 53,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789946339.6614833,
+      "execution_count": 23917
+    },
+    {
+      "case_id": 54,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789946440.9897194,
+      "execution_count": 24267
+    },
+    {
+      "case_id": 55,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789946676.6155953,
+      "execution_count": 24905
+    },
+    {
+      "case_id": 56,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789946775.1233933,
+      "execution_count": 25234
+    },
+    {
+      "case_id": 57,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789947249.3044422,
+      "execution_count": 26537
+    },
+    {
+      "case_id": 58,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789949396.7995894,
+      "execution_count": 32615
+    },
+    {
+      "case_id": 59,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789950100.8431728,
+      "execution_count": 34779
+    },
+    {
+      "case_id": 60,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789950250.8988595,
+      "execution_count": 35148
+    },
+    {
+      "case_id": 61,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789950610.3681033,
+      "execution_count": 36177
+    },
+    {
+      "case_id": 62,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789950998.7314394,
+      "execution_count": 37236
+    },
+    {
+      "case_id": 63,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789951905.6273065,
+      "execution_count": 40000
+    },
+    {
+      "case_id": 64,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "BadRequest",
+      "timestamp": 1789952577.182844,
+      "execution_count": 41819
+    },
+    {
+      "case_id": 65,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789952686.4864168,
+      "execution_count": 42190
+    },
+    {
+      "case_id": 66,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789952808.2254987,
+      "execution_count": 42552
+    },
+    {
+      "case_id": 67,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789953135.5663686,
+      "execution_count": 43608
+    },
+    {
+      "case_id": 68,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789953255.1456673,
+      "execution_count": 43976
+    },
+    {
+      "case_id": 69,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789953390.134102,
+      "execution_count": 44352
+    },
+    {
+      "case_id": 70,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789953502.4462733,
+      "execution_count": 44709
+    },
+    {
+      "case_id": 71,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789953627.4387715,
+      "execution_count": 45085
+    },
+    {
+      "case_id": 72,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789953761.1904733,
+      "execution_count": 45437
+    },
+    {
+      "case_id": 73,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789953898.5707924,
+      "execution_count": 45810
+    },
+    {
+      "case_id": 74,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789954022.5946643,
+      "execution_count": 46171
+    },
+    {
+      "case_id": 75,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789954255.878512,
+      "execution_count": 46891
+    },
+    {
+      "case_id": 76,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789954704.6117098,
+      "execution_count": 47969
+    },
+    {
+      "case_id": 77,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789955075.4476511,
+      "execution_count": 49108
+    },
+    {
+      "case_id": 78,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789955655.5479877,
+      "execution_count": 50892
+    },
+    {
+      "case_id": 79,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789955780.714747,
+      "execution_count": 51258
+    },
+    {
+      "case_id": 80,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789955928.721142,
+      "execution_count": 51681
+    },
+    {
+      "case_id": 81,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789956284.086842,
+      "execution_count": 52891
+    },
+    {
+      "case_id": 82,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789956531.9758644,
+      "execution_count": 53611
+    },
+    {
+      "case_id": 83,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789957189.2243073,
+      "execution_count": 55553
+    },
+    {
+      "case_id": 84,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789957298.047674,
+      "execution_count": 55957
+    },
+    {
+      "case_id": 85,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789957663.8074143,
+      "execution_count": 57087
+    },
+    {
+      "case_id": 86,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "BadRequest",
+      "timestamp": 1789957807.6172051,
+      "execution_count": 57484
+    },
+    {
+      "case_id": 87,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "BadRequest",
+      "timestamp": 1789957936.2098598,
+      "execution_count": 57864
+    },
+    {
+      "case_id": 88,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789958058.337652,
+      "execution_count": 58247
+    },
+    {
+      "case_id": 89,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789958191.771225,
+      "execution_count": 58625
+    },
+    {
+      "case_id": 90,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789958457.2785683,
+      "execution_count": 59410
+    },
+    {
+      "case_id": 91,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789958754.6708047,
+      "execution_count": 60164
+    },
+    {
+      "case_id": 92,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789959328.4504414,
+      "execution_count": 61650
+    },
+    {
+      "case_id": 93,
+      "coverage_percentage": 16.970653784185576,
+      "status_code": "Success",
+      "timestamp": 1789959481.2206268,
+      "execution_count": 62018
+    }
+  ],
+  "configuration": {
+    "name": "oauth-java-coverage-fuzzer",
+    "target_type": "keycloak",
+    "protocol": "OAUTH",
+    "implementation": "Keycloak",
+    "output_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/ablation/no_ep_s3",
+    "exec_tmout": "10000+",
+    "oauth": {
+      "base_url": "http://127.0.0.1:28081",
+      "realm": "fuzz",
+      "client_id": "fuzz-client",
+      "client_secret": "fuzz-client-secret",
+      "redirect_uri": "http://127.0.0.1:7777/callback",
+      "user": "testuser",
+      "password": "testpass",
+      "scope": "openid profile email",
+      "allow_redirect_uri_extra_param": false
+    },
+    "jacoco": {
+      "version": "0.8.14",
+      "work_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/ablation/no_ep_s3/jacoco",
+      "dump_every_n": 50,
+      "agent_port": 26310,
+      "report_dir": "coverage_reports",
+      "includes": [
+        "org.keycloak.*"
+      ],
+      "excludes": []
+    },
+    "fuzzing": {
+      "max_iterations": 2000,
+      "timeout_seconds": 86400,
+      "mutation_strategies": [
+        "param_corruption",
+        "header_injection",
+        "url_manipulation",
+        "method_mutation"
+      ],
+      "coverage_threshold": 0.1,
+      "canonicalize_sequences": true,
+      "seed": 3,
+      "save_interesting_cases": true,
+      "budget_protocol_steps": 0,
+      "dump_every_n": 200,
+      "disable_ep": true
+    },
+    "keycloak": {
+      "container_name": "keycloak-abl-lane1",
+      "version": "26.7.4",
+      "jvm_args": [
+        "-Xmx1536m",
+        "-Xms512m",
+        "-XX:+UseG1GC",
+        "-XX:MaxGCPauseMillis=200"
+      ],
+      "startup_timeout": 60,
+      "health_check_url": "http://127.0.0.1:28081/realms/master",
+      "host_http_port": 28081
+    }
+  },
+  "timestamp": 1789959721.3740723
+}

@@ -1,0 +1,30 @@
+Go Coverage Report - Authelia OAuth Fuzzing
+Generated: 20260926_185801
+======================================================================
+
+Overall Coverage: 0.00%
+Mode: hybrid
+
+=== Code Coverage ===
+Statements: 0/1100
+Packages: 0/0
+Methods: 0/0
+
+=== State-based Metrics ===
+Unique states: 5
+Response codes: [302, 400, 401, 404]
+Endpoints hit: 5
+Error patterns: 0
+Total executions: 5
+
+=== Security Findings ===
+Security-relevant findings: 0
+Crash events: 0
+
+=== Endpoint Coverage ===
+  Authorize: 1 hits
+  Login: 1 hits
+  AuthCodeRedirect: 1 hits
+  TokenExchange: 1 hits
+  UserInfo: 1 hits
+

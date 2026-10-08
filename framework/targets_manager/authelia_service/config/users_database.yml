@@ -1,0 +1,9 @@
+users:
+  testuser:
+    disabled: false
+    displayname: Test User
+    password: $argon2id$v=19$m=65536,t=3,p=4$EA4kjn9ako/mnzOfD+GZcQ$kGOyfcpZLJWQk89+/aoaqEsMWSd8N5Oe933zSHiEVe0
+    email: testuser@example.com
+    groups:
+    - users
+    - dev

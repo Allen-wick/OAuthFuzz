@@ -1,0 +1,2506 @@
+====================================================================================================
+Cxf Security PoC Evidence Log
+Generated: 2026-05-20 10:49:20
+====================================================================================================
+
+[HTTP REQUEST] CXF authorize (warm_up)
+Request ID: REQ-INIT-0001 | Timestamp: 2026-05-20 10:49:20.262
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid+read_resource&state=cxf-warmup
+
+[HTTP RESPONSE] CXF authorize (warm_up)
+Request ID: REQ-INIT-0001 | Timestamp: 2026-05-20 10:49:20.265
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 303
+
+Response Headers:
+  Location: http://127.0.0.1:7777/callback?state=cxf-warmup&code=c09de3f184a04aaf151c3d82bd5829ff5cda10935b74527f3ad2448200c581a1
+
+[HTTP REQUEST] CXF token exchange (warm_up)
+Request ID: REQ-INIT-0002 | Timestamp: 2026-05-20 10:49:20.265
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: c09de3f184a04aaf151c3d82bd5829ff5cda10935b74527f3ad2448200c581a1
+  redirect_uri: http://127.0.0.1:7777/callback
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] CXF token exchange (warm_up)
+Request ID: REQ-INIT-0002 | Timestamp: 2026-05-20 10:49:20.267
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "104dec9dce749db7292e7c18a60075b0333ed29e3f6beefb072749d79c24ee55",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "openid read_resource"
+}
+
+
+====================================================================================================
+Test: CXF_PKCE_NOT_ENFORCED
+Description: Verify PKCE is not required for authorization code grants
+Start: 2026-05-20 10:49:20
+====================================================================================================
+
+[HTTP REQUEST] Authorize WITHOUT code_challenge (PKCE probe)
+Request ID: REQ-CXF_PKCE_NOT_ENFORCED-0001 | Timestamp: 2026-05-20 10:49:20.306
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid&state=pkce-not-enforced
+
+[HTTP RESPONSE] Authorize WITHOUT code_challenge (PKCE probe)
+Request ID: REQ-CXF_PKCE_NOT_ENFORCED-0001 | Timestamp: 2026-05-20 10:49:20.311
+Elapsed: 0.005s
+--------------------------------------------------------------------------------
+Status Code: 303
+
+Response Headers:
+  Location: http://127.0.0.1:7777/callback?state=pkce-not-enforced&code=4d8309aa43dcb89adc3e7522911e3fccc55fd687d9cbb46e33bbfa386816f6a8
+
+[SECURITY FINDING]
+--------------------------------------------------------------------------------
+Severity: LOW
+Issue: PKCE is not enforced for authorization code grants
+Impact: Minor security issue requiring further assessment
+CWE: CWE-347 (Missing verification of cryptographic integrity)
+Recommendation: Set requireCodeVerifier=true and expectCodeVerifierForPublicClients=true
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║ DETAILED FAILURE EVIDENCE: CXF_PKCE_NOT_ENFORCED                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Test: CXF_PKCE_NOT_ENFORCED
+Timestamp: 2026-05-20 10:49:20
+Total Requests in Test: 1
+
+[FINDING DETAILS]
+--------------------------------------------------------------------------------
+  issue: PKCE is not enforced for authorization code grants
+  evidence: Authorization code issued without code_challenge parameter
+  cwe: CWE-347 (Missing verification of cryptographic integrity)
+  rfc: RFC 7636 §4.1 recommends PKCE for all auth code grants
+  code_location: AuthorizationCodeGrantHandler.java — requireCodeVerifier defaults to false
+  recommendation: Set requireCodeVerifier=true and expectCodeVerifierForPublicClients=true
+
+[SERVER-SIDE ERROR LOGS]
+--------------------------------------------------------------------------------
+  Found 9 error line(s):
+
+  19-May-2026 03:50:59.836 SEVERE [http-nio-8080-exec-9] org.apache.cxf.interceptor.AbstractFaultChainInitiatorObserver.onMessage An unexpected error occurred during error handling. No further error processing will occur.
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:43:56.653 WARNING [http-nio-8080-exec-2] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:43:56.656 WARNING [http-nio-8080-exec-4] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:43:56.658 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+
+[REPRODUCTION NOTES]
+--------------------------------------------------------------------------------
+  Issue Summary: PKCE is not enforced for authorization code grants
+  Recommended Fix: Set requireCodeVerifier=true and expectCodeVerifierForPublicClients=true
+  Evidence Log: cxf_poc_evidence.log
+  Requests Captured: 1
+
+================================================================================
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_PKCE_NOT_ENFORCED
+--------------------------------------------------------------------------------
+
+🟡 WARNINGS:
+  20-May-2026 02:49:20.309 WARNING [http-nio-8080-exec-6] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+
+[TEST RESULT] FAIL
+Duration: 0.06s | Requests: 1
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_PLAIN_PKCE_ACCEPTED
+Description: Verify plain code_challenge_method is accepted (S256 not enforced)
+Start: 2026-05-20 10:49:20
+====================================================================================================
+
+[HTTP REQUEST] Authorize with code_challenge_method=plain
+Request ID: REQ-CXF_PLAIN_PKCE_ACCEPTED-0001 | Timestamp: 2026-05-20 10:49:20.399
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid&state=plain-pkce-test&code_challenge=plain-verifier-0123456789ABCDEF0123456789ABCDEF&code_challenge_method=plain
+
+[HTTP RESPONSE] Authorize with code_challenge_method=plain
+Request ID: REQ-CXF_PLAIN_PKCE_ACCEPTED-0001 | Timestamp: 2026-05-20 10:49:20.402
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 303
+
+Response Headers:
+  Location: http://127.0.0.1:7777/callback?state=plain-pkce-test&code=4db5e484b8595e92e69b2ee15073490616e1f04828dcf83ce3c4bfe4be669a1a
+
+[SECURITY FINDING]
+--------------------------------------------------------------------------------
+Severity: LOW
+Issue: Plain PKCE code_challenge_method is accepted — S256 not enforced
+Impact: Minor security issue requiring further assessment
+Recommendation: Reject plain code_challenge_method; require S256
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║ DETAILED FAILURE EVIDENCE: CXF_PLAIN_PKCE_ACCEPTED                          ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Test: CXF_PLAIN_PKCE_ACCEPTED
+Timestamp: 2026-05-20 10:49:20
+Total Requests in Test: 1
+
+[FINDING DETAILS]
+--------------------------------------------------------------------------------
+  issue: Plain PKCE code_challenge_method is accepted — S256 not enforced
+  evidence: Authorization code issued with code_challenge_method=plain
+  rfc: RFC 7636 §4.2 recommends S256 over plain
+  code_location: AuthorizationCodeGrantHandler.java — PlainCodeVerifier is the default
+  recommendation: Reject plain code_challenge_method; require S256
+
+[SERVER-SIDE ERROR LOGS]
+--------------------------------------------------------------------------------
+  Found 9 error line(s):
+
+  19-May-2026 03:50:59.836 SEVERE [http-nio-8080-exec-9] org.apache.cxf.interceptor.AbstractFaultChainInitiatorObserver.onMessage An unexpected error occurred during error handling. No further error processing will occur.
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:43:56.653 WARNING [http-nio-8080-exec-2] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:43:56.656 WARNING [http-nio-8080-exec-4] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:43:56.658 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+
+[REPRODUCTION NOTES]
+--------------------------------------------------------------------------------
+  Issue Summary: Plain PKCE code_challenge_method is accepted — S256 not enforced
+  Recommended Fix: Reject plain code_challenge_method; require S256
+  Evidence Log: cxf_poc_evidence.log
+  Requests Captured: 1
+
+================================================================================
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_PLAIN_PKCE_ACCEPTED
+--------------------------------------------------------------------------------
+
+🟡 WARNINGS:
+  20-May-2026 02:49:20.401 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+
+[TEST RESULT] FAIL
+Duration: 0.05s | Requests: 1
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_INTROSPECTION_UNAUTH
+Description: Verify introspection endpoint properly blocks unauthenticated requests (C1)
+Start: 2026-05-20 10:49:20
+====================================================================================================
+
+[HTTP REQUEST] CXF authorize (warm_up)
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0001 | Timestamp: 2026-05-20 10:49:20.510
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid+read_resource&state=cxf-warmup
+
+[HTTP RESPONSE] CXF authorize (warm_up)
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0001 | Timestamp: 2026-05-20 10:49:20.513
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 303
+
+Response Headers:
+  Location: http://127.0.0.1:7777/callback?state=cxf-warmup&code=f9839ae40cd31705e27a3afe46bfc25b8cf1c1bea97005ce4e9f06871d73b09d
+
+[HTTP REQUEST] CXF token exchange (warm_up)
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0002 | Timestamp: 2026-05-20 10:49:20.513
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: f9839ae40cd31705e27a3afe46bfc25b8cf1c1bea97005ce4e9f06871d73b09d
+  redirect_uri: http://127.0.0.1:7777/callback
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] CXF token exchange (warm_up)
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0002 | Timestamp: 2026-05-20 10:49:20.516
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "026d1df39124607b10d20e036be5ef68fab65b09f740c36fd744b56a313a2c06",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "openid read_resource"
+}
+
+[HTTP REQUEST] Introspect with no_auth
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0003 | Timestamp: 2026-05-20 10:49:20.516
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: 026d1df39124607b10d20e036be5ef68fab65b09f740c36fd744b56a313a2c06
+
+[HTTP RESPONSE] Introspect with no_auth
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0003 | Timestamp: 2026-05-20 10:49:20.518
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": true,
+  "client_id": "fuzz-client",
+  "username": "alice",
+  "token_type": "Bearer",
+  "scope": "openid read_resource",
+  "iat": 1779245360,
+  "exp": 1779248960
+}
+
+[SERVER LOGS] Introspection with no_auth returned 200
+--------------------------------------------------------------------------------
+20-May-2026 02:43:56.656 WARNING [http-nio-8080-exec-4] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+20-May-2026 02:43:56.658 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+20-May-2026 02:43:56.926 WARNING [http-nio-8080-exec-6] org.apache.cxf.transport.servlet.ServletController.invoke Can't find the request for http://127.0.0.1:8081/services/services/oidc/.well-known/openid-configuration's Observer 
+20-May-2026 02:43:56.929 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.260 WARNING [http-nio-8080-exec-8] org.apache.cxf.transport.servlet.ServletController.invoke Can't find the request for http://127.0.0.1:8081/services/services/oidc/.well-known/openid-configuration's Observer 
+20-May-2026 02:49:20.264 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.309 WARNING [http-nio-8080-exec-6] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.401 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.512 WARNING [http-nio-8080-exec-5] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.517 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[HTTP REQUEST] Introspect with empty_bearer
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0004 | Timestamp: 2026-05-20 10:49:20.534
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Bearer ...
+
+Request Body:
+  token: 026d1df39124607b10d20e036be5ef68fab65b09f740c36fd744b56a313a2c06
+
+[HTTP RESPONSE] Introspect with empty_bearer
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0004 | Timestamp: 2026-05-20 10:49:20.540
+Elapsed: 0.005s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": true,
+  "client_id": "fuzz-client",
+  "username": "alice",
+  "token_type": "Bearer",
+  "scope": "openid read_resource",
+  "iat": 1779245360,
+  "exp": 1779248960
+}
+
+[SERVER LOGS] Introspection with empty_bearer returned 200
+--------------------------------------------------------------------------------
+20-May-2026 02:43:56.656 WARNING [http-nio-8080-exec-4] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+20-May-2026 02:43:56.658 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+20-May-2026 02:43:56.926 WARNING [http-nio-8080-exec-6] org.apache.cxf.transport.servlet.ServletController.invoke Can't find the request for http://127.0.0.1:8081/services/services/oidc/.well-known/openid-configuration's Observer 
+20-May-2026 02:43:56.929 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.260 WARNING [http-nio-8080-exec-8] org.apache.cxf.transport.servlet.ServletController.invoke Can't find the request for http://127.0.0.1:8081/services/services/oidc/.well-known/openid-configuration's Observer 
+20-May-2026 02:49:20.264 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.309 WARNING [http-nio-8080-exec-6] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.401 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.512 WARNING [http-nio-8080-exec-5] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.517 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+20-May-2026 02:49:20.537 WARNING [http-nio-8080-exec-9] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[HTTP REQUEST] Introspect with invalid_bearer
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0005 | Timestamp: 2026-05-20 10:49:20.557
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Bearer invalid-token-12345...
+
+Request Body:
+  token: 026d1df39124607b10d20e036be5ef68fab65b09f740c36fd744b56a313a2c06
+
+[HTTP RESPONSE] Introspect with invalid_bearer
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0005 | Timestamp: 2026-05-20 10:49:20.560
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": true,
+  "client_id": "fuzz-client",
+  "username": "alice",
+  "token_type": "Bearer",
+  "scope": "openid read_resource",
+  "iat": 1779245360,
+  "exp": 1779248960
+}
+
+[SERVER LOGS] Introspection with invalid_bearer returned 200
+--------------------------------------------------------------------------------
+20-May-2026 02:43:56.656 WARNING [http-nio-8080-exec-4] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+20-May-2026 02:43:56.658 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+20-May-2026 02:43:56.926 WARNING [http-nio-8080-exec-6] org.apache.cxf.transport.servlet.ServletController.invoke Can't find the request for http://127.0.0.1:8081/services/services/oidc/.well-known/openid-configuration's Observer 
+20-May-2026 02:43:56.929 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.260 WARNING [http-nio-8080-exec-8] org.apache.cxf.transport.servlet.ServletController.invoke Can't find the request for http://127.0.0.1:8081/services/services/oidc/.well-known/openid-configuration's Observer 
+20-May-2026 02:49:20.264 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.309 WARNING [http-nio-8080-exec-6] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.401 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.512 WARNING [http-nio-8080-exec-5] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.517 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+20-May-2026 02:49:20.537 WARNING [http-nio-8080-exec-9] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+20-May-2026 02:49:20.559 WARNING [http-nio-8080-exec-10] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[HTTP REQUEST] Introspect with basic_auth_client
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0006 | Timestamp: 2026-05-20 10:49:20.576
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Basic ZnV6ei1jbGllbnQ6ZnV6ei1jbGllbnQtc2VjcmV0...
+
+Request Body:
+  token: 026d1df39124607b10d20e036be5ef68fab65b09f740c36fd744b56a313a2c06
+
+[HTTP RESPONSE] Introspect with basic_auth_client
+Request ID: REQ-CXF_INTROSPECTION_UNAUTH-0006 | Timestamp: 2026-05-20 10:49:20.579
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": true,
+  "client_id": "fuzz-client",
+  "username": "alice",
+  "token_type": "Bearer",
+  "scope": "openid read_resource",
+  "iat": 1779245360,
+  "exp": 1779248960
+}
+
+[SERVER LOGS] Introspection with basic_auth_client returned 200
+--------------------------------------------------------------------------------
+20-May-2026 02:43:56.656 WARNING [http-nio-8080-exec-4] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+20-May-2026 02:43:56.658 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+20-May-2026 02:43:56.926 WARNING [http-nio-8080-exec-6] org.apache.cxf.transport.servlet.ServletController.invoke Can't find the request for http://127.0.0.1:8081/services/services/oidc/.well-known/openid-configuration's Observer 
+20-May-2026 02:43:56.929 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.260 WARNING [http-nio-8080-exec-8] org.apache.cxf.transport.servlet.ServletController.invoke Can't find the request for http://127.0.0.1:8081/services/services/oidc/.well-known/openid-configuration's Observer 
+20-May-2026 02:49:20.264 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.309 WARNING [http-nio-8080-exec-6] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.401 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.512 WARNING [http-nio-8080-exec-5] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+20-May-2026 02:49:20.517 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+20-May-2026 02:49:20.537 WARNING [http-nio-8080-exec-9] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+20-May-2026 02:49:20.559 WARNING [http-nio-8080-exec-10] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+20-May-2026 02:49:20.578 WARNING [http-nio-8080-exec-2] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[SECURITY FINDING]
+--------------------------------------------------------------------------------
+Severity: HIGH
+Issue: Token introspection endpoint processes requests without authentication
+Impact: Significant security control bypass or data exposure
+CWE: CWE-306 (Missing Authentication for Critical Function)
+Recommendation: Fix checkSecurityContext() to throw the exception it creates
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║ DETAILED FAILURE EVIDENCE: CXF_INTROSPECTION_UNAUTH                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Test: CXF_INTROSPECTION_UNAUTH
+Timestamp: 2026-05-20 10:49:20
+Total Requests in Test: 6
+
+[FINDING DETAILS]
+--------------------------------------------------------------------------------
+  issue: Token introspection endpoint processes requests without authentication
+  vulnerable_probes:
+    [
+        {
+            "auth": "no_auth",
+            "status": 200,
+            "response": "{\"active\":true,\"client_id\":\"fuzz-client\",\"username\":\"alice\",\"token_type\":\"Bearer\",\"scope\":\"openid read_resource\",\"iat\":1779245360,\"exp\":1779248960}"
+        },
+        {
+            "auth": "empty_bearer",
+            "status": 200,
+            "response": "{\"active\":true,\"client_id\":\"fuzz-client\",\"username\":\"alice\",\"token_type\":\"Bearer\",\"scope\":\"openid read_resource\",\"iat\":1779245360,\"exp\":1779248960}"
+        },
+        {
+            "auth": "invalid_bearer",
+            "status": 200,
+            "response": "{\"active\":true,\"client_id\":\"fuzz-client\",\"username\":\"alice\",\"token_type\":\"Bearer\",\"scope\":\"openid read_resource\",\"iat\":1779245360,\"exp\":1779248960}"
+        },
+        {
+            "auth": "basic_auth_client",
+            "status": 200,
+            "response": "{\"active\":true,\"client_id\":\"fuzz-client\",\"username\":\"alice\",\"token_type\":\"Bearer\",\"scope\":\"openid read_resource\",\"iat\":1779245360,\"exp\":1779248960}"
+        }
+    ]
+  cwe: CWE-306 (Missing Authentication for Critical Function)
+  root_cause: TokenIntrospectionService.checkSecurityContext() calls ExceptionUtils.toNotAuthorizedException() but does not throw it
+  code_location: TokenIntrospectionService.java:112-121
+  rfc: RFC 7662 §2.1 requires client authentication
+  recommendation: Fix checkSecurityContext() to throw the exception it creates
+
+[SERVER-SIDE ERROR LOGS]
+--------------------------------------------------------------------------------
+  Found 8 error line(s):
+
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:43:56.653 WARNING [http-nio-8080-exec-2] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:43:56.656 WARNING [http-nio-8080-exec-4] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:43:56.658 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+
+[REPRODUCTION NOTES]
+--------------------------------------------------------------------------------
+  Issue Summary: Token introspection endpoint processes requests without authentication
+  Recommended Fix: Fix checkSecurityContext() to throw the exception it creates
+  Evidence Log: cxf_poc_evidence.log
+  Requests Captured: 6
+
+================================================================================
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_INTROSPECTION_UNAUTH
+--------------------------------------------------------------------------------
+
+🟡 WARNINGS:
+  20-May-2026 02:49:20.512 WARNING [http-nio-8080-exec-5] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+  20-May-2026 02:49:20.517 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:20.537 WARNING [http-nio-8080-exec-9] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:20.559 WARNING [http-nio-8080-exec-10] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:20.578 WARNING [http-nio-8080-exec-2] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[TEST RESULT] FAIL
+Duration: 0.15s | Requests: 6
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_PASSWORD_GRANT_SCOPES
+Description: Verify scope validation on resource owner password grant (C5)
+Start: 2026-05-20 10:49:20
+====================================================================================================
+
+[HTTP REQUEST] Password grant scope=unregistered_scope
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0001 | Timestamp: 2026-05-20 10:49:20.681
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  scope: unregistered_scope_xyz
+
+[HTTP RESPONSE] Password grant scope=unregistered_scope
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0001 | Timestamp: 2026-05-20 10:49:20.683
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "invalid_grant"
+}
+
+[HTTP REQUEST] Password grant scope=mixed_scopes
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0002 | Timestamp: 2026-05-20 10:49:20.683
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  scope: openid admin_scope
+
+[HTTP RESPONSE] Password grant scope=mixed_scopes
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0002 | Timestamp: 2026-05-20 10:49:20.685
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "invalid_grant"
+}
+
+[HTTP REQUEST] Password grant scope=empty_scope
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0003 | Timestamp: 2026-05-20 10:49:20.686
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Password grant scope=empty_scope
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0003 | Timestamp: 2026-05-20 10:49:20.688
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "97422435228ea655b1b7030316ae6ba063fd8e30607a1826fb9a8974377cb892",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+
+[HTTP REQUEST] Password grant scope=excessive
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0004 | Timestamp: 2026-05-20 10:49:20.688
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  scope: openid read_resource write_resource admin delete
+
+[HTTP RESPONSE] Password grant scope=excessive
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0004 | Timestamp: 2026-05-20 10:49:20.689
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "invalid_grant"
+}
+
+[HTTP REQUEST] Password grant scope=space_only
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0005 | Timestamp: 2026-05-20 10:49:20.690
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Password grant scope=space_only
+Request ID: REQ-CXF_PASSWORD_GRANT_SCOPES-0005 | Timestamp: 2026-05-20 10:49:20.692
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "2f7c2b89fba9872eb8eea528097ebe04778a29bd6ef6fe14716ff45e7957fa4d",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+
+[TEST RESULT] PASS
+Duration: 0.04s | Requests: 5
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_AUTH_CODE_REPLAY
+Description: Verify authorization codes cannot be replayed (RFC 6749 §4.1.2)
+Start: 2026-05-20 10:49:20
+====================================================================================================
+
+[HTTP REQUEST] Authorize for replay test
+Request ID: REQ-CXF_AUTH_CODE_REPLAY-0001 | Timestamp: 2026-05-20 10:49:20.784
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid&state=replay-test
+
+[HTTP RESPONSE] Authorize for replay test
+Request ID: REQ-CXF_AUTH_CODE_REPLAY-0001 | Timestamp: 2026-05-20 10:49:20.787
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 303
+
+Response Headers:
+  Location: http://127.0.0.1:7777/callback?state=replay-test&code=ab0759560f570d5ea067021dbaa0005186555fed25445aa84adb7618dce710af
+
+[HTTP REQUEST] First code exchange
+Request ID: REQ-CXF_AUTH_CODE_REPLAY-0002 | Timestamp: 2026-05-20 10:49:20.787
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: ab0759560f570d5ea067021dbaa0005186555fed25445aa84adb7618dce710af
+  redirect_uri: http://127.0.0.1:7777/callback
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] First code exchange
+Request ID: REQ-CXF_AUTH_CODE_REPLAY-0002 | Timestamp: 2026-05-20 10:49:20.790
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "ea4fe46cb438e3518b13b7b2f0bd9ca0afe8ba5eeaa9a698c2c8c2da7d8bbbb5",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "openid"
+}
+
+[HTTP REQUEST] Code REPLAY attempt
+Request ID: REQ-CXF_AUTH_CODE_REPLAY-0003 | Timestamp: 2026-05-20 10:49:21.290
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: ab0759560f570d5ea067021dbaa0005186555fed25445aa84adb7618dce710af
+  redirect_uri: http://127.0.0.1:7777/callback
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Code REPLAY attempt
+Request ID: REQ-CXF_AUTH_CODE_REPLAY-0003 | Timestamp: 2026-05-20 10:49:21.293
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "invalid_grant"
+}
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_AUTH_CODE_REPLAY
+--------------------------------------------------------------------------------
+
+🟡 WARNINGS:
+  20-May-2026 02:49:20.786 WARNING [http-nio-8080-exec-7] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+
+[TEST RESULT] PASS
+Duration: 0.56s | Requests: 3
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_REFRESH_TOKEN_REUSE
+Description: Verify refresh token rotation/reuse detection
+Start: 2026-05-20 10:49:21
+====================================================================================================
+
+[HTTP REQUEST] Password grant for refresh token
+Request ID: REQ-CXF_REFRESH_TOKEN_REUSE-0001 | Timestamp: 2026-05-20 10:49:21.373
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Password grant for refresh token
+Request ID: REQ-CXF_REFRESH_TOKEN_REUSE-0001 | Timestamp: 2026-05-20 10:49:21.375
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "2030cca04ef64d8462f8590b15a6aa533ce174e45b19c77b3cea123bbeaa92d8",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+
+[TEST RESULT] PASS
+Duration: 0.05s | Requests: 1
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_INTROSPECTION_JWT
+Description: Verify introspection returns valid response for active tokens (C7)
+Start: 2026-05-20 10:49:21
+====================================================================================================
+
+[HTTP REQUEST] CXF authorize (warm_up)
+Request ID: REQ-CXF_INTROSPECTION_JWT-0001 | Timestamp: 2026-05-20 10:49:21.450
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid+read_resource&state=cxf-warmup
+
+[HTTP RESPONSE] CXF authorize (warm_up)
+Request ID: REQ-CXF_INTROSPECTION_JWT-0001 | Timestamp: 2026-05-20 10:49:21.453
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 303
+
+Response Headers:
+  Location: http://127.0.0.1:7777/callback?state=cxf-warmup&code=a62b7edfde45725f6c18f98683a6e2216e30ce29346fcd770ec90fccfa883f00
+
+[HTTP REQUEST] CXF token exchange (warm_up)
+Request ID: REQ-CXF_INTROSPECTION_JWT-0002 | Timestamp: 2026-05-20 10:49:21.453
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: a62b7edfde45725f6c18f98683a6e2216e30ce29346fcd770ec90fccfa883f00
+  redirect_uri: http://127.0.0.1:7777/callback
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] CXF token exchange (warm_up)
+Request ID: REQ-CXF_INTROSPECTION_JWT-0002 | Timestamp: 2026-05-20 10:49:21.456
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "0db303bd3f61055c16c3dc56cf2532c5a01de3f92784c66ef2c28c7974e076e9",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "openid read_resource"
+}
+
+[HTTP REQUEST] Introspect valid_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0003 | Timestamp: 2026-05-20 10:49:21.456
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: 0db303bd3f61055c16c3dc56cf2532c5a01de3f92784c66ef2c28c7974e076e9
+
+[HTTP RESPONSE] Introspect valid_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0003 | Timestamp: 2026-05-20 10:49:21.458
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": true,
+  "client_id": "fuzz-client",
+  "username": "alice",
+  "token_type": "Bearer",
+  "scope": "openid read_resource",
+  "iat": 1779245361,
+  "exp": 1779248961
+}
+
+[HTTP REQUEST] Introspect empty_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0004 | Timestamp: 2026-05-20 10:49:21.458
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: 
+
+[HTTP RESPONSE] Introspect empty_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0004 | Timestamp: 2026-05-20 10:49:21.460
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Introspect invalid_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0005 | Timestamp: 2026-05-20 10:49:21.461
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: this-is-not-a-valid-token-at-all-12345
+
+[HTTP RESPONSE] Introspect invalid_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0005 | Timestamp: 2026-05-20 10:49:21.463
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Introspect null_byte_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0006 | Timestamp: 2026-05-20 10:49:21.463
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: valid token
+
+[HTTP RESPONSE] Introspect null_byte_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0006 | Timestamp: 2026-05-20 10:49:21.466
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Introspect very_long_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0007 | Timestamp: 2026-05-20 10:49:21.466
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA... (len=4096)
+
+[HTTP RESPONSE] Introspect very_long_token
+Request ID: REQ-CXF_INTROSPECTION_JWT-0007 | Timestamp: 2026-05-20 10:49:21.470
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Final introspection validation
+Request ID: REQ-CXF_INTROSPECTION_JWT-0008 | Timestamp: 2026-05-20 10:49:21.470
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: 0db303bd3f61055c16c3dc56cf2532c5a01de3f92784c66ef2c28c7974e076e9
+
+[HTTP RESPONSE] Final introspection validation
+Request ID: REQ-CXF_INTROSPECTION_JWT-0008 | Timestamp: 2026-05-20 10:49:21.472
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": true,
+  "client_id": "fuzz-client",
+  "username": "alice",
+  "token_type": "Bearer",
+  "scope": "openid read_resource",
+  "iat": 1779245361,
+  "exp": 1779248961
+}
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_INTROSPECTION_JWT
+--------------------------------------------------------------------------------
+
+🟡 WARNINGS:
+  20-May-2026 02:49:21.452 WARNING [http-nio-8080-exec-8] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+  20-May-2026 02:49:21.457 WARNING [http-nio-8080-exec-3] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:21.460 WARNING [http-nio-8080-exec-2] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:21.462 WARNING [http-nio-8080-exec-4] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:21.465 WARNING [http-nio-8080-exec-7] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:21.467 WARNING [http-nio-8080-exec-9] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:21.471 WARNING [http-nio-8080-exec-10] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[TEST RESULT] PASS
+Duration: 0.06s | Requests: 8
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_REVOCATION_IDEMPOTENT
+Description: Verify revocation returns 200 for invalid tokens (and check empty catch risk, C3)
+Start: 2026-05-20 10:49:21
+====================================================================================================
+
+[HTTP REQUEST] CXF authorize (warm_up)
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0001 | Timestamp: 2026-05-20 10:49:21.558
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid+read_resource&state=cxf-warmup
+
+[HTTP RESPONSE] CXF authorize (warm_up)
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0001 | Timestamp: 2026-05-20 10:49:21.561
+Elapsed: 0.004s
+--------------------------------------------------------------------------------
+Status Code: 303
+
+Response Headers:
+  Location: http://127.0.0.1:7777/callback?state=cxf-warmup&code=fa059bbdd1ed96ea74551b5f9b01f9a517c643efadb9079a16aa85c8043f1464
+
+[HTTP REQUEST] CXF token exchange (warm_up)
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0002 | Timestamp: 2026-05-20 10:49:21.562
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: fa059bbdd1ed96ea74551b5f9b01f9a517c643efadb9079a16aa85c8043f1464
+  redirect_uri: http://127.0.0.1:7777/callback
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] CXF token exchange (warm_up)
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0002 | Timestamp: 2026-05-20 10:49:21.564
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "a126f8bb727c1c9ab73e98c3fa04bfc5a668dcebd9660b0d0bf3e77dfc2aac33",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "openid read_resource"
+}
+
+[HTTP REQUEST] Revoke valid_access_token
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0003 | Timestamp: 2026-05-20 10:49:21.564
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/revoke
+
+Request Body:
+  token: a126f8bb727c1c9ab73e98c3fa04bfc5a668dcebd9660b0d0bf3e77dfc2aac33
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  token_type_hint: access_token
+
+[HTTP RESPONSE] Revoke valid_access_token
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0003 | Timestamp: 2026-05-20 10:49:21.566
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+
+[HTTP REQUEST] Revoke valid_access_token_again
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0004 | Timestamp: 2026-05-20 10:49:21.566
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/revoke
+
+Request Body:
+  token: a126f8bb727c1c9ab73e98c3fa04bfc5a668dcebd9660b0d0bf3e77dfc2aac33
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  token_type_hint: access_token
+
+[HTTP RESPONSE] Revoke valid_access_token_again
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0004 | Timestamp: 2026-05-20 10:49:21.568
+Elapsed: 0.001s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+
+[HTTP REQUEST] Revoke invalid_token
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0005 | Timestamp: 2026-05-20 10:49:21.568
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/revoke
+
+Request Body:
+  token: this-token-does-not-exist-abc123
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Revoke invalid_token
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0005 | Timestamp: 2026-05-20 10:49:21.570
+Elapsed: 0.001s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+
+[HTTP REQUEST] Revoke empty_token
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0006 | Timestamp: 2026-05-20 10:49:21.570
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/revoke
+
+Request Body:
+  token: 
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Revoke empty_token
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0006 | Timestamp: 2026-05-20 10:49:21.571
+Elapsed: 0.001s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+
+[HTTP REQUEST] Revoke null_hint
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0007 | Timestamp: 2026-05-20 10:49:21.572
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/revoke
+
+Request Body:
+  token: a126f8bb727c1c9ab73e98c3fa04bfc5a668dcebd9660b0d0bf3e77dfc2aac33
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Revoke null_hint
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0007 | Timestamp: 2026-05-20 10:49:21.574
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+
+[HTTP REQUEST] Revoke wrong_hint
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0008 | Timestamp: 2026-05-20 10:49:21.575
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/revoke
+
+Request Body:
+  token: a126f8bb727c1c9ab73e98c3fa04bfc5a668dcebd9660b0d0bf3e77dfc2aac33
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  token_type_hint: refresh_token
+
+[HTTP RESPONSE] Revoke wrong_hint
+Request ID: REQ-CXF_REVOCATION_IDEMPOTENT-0008 | Timestamp: 2026-05-20 10:49:21.576
+Elapsed: 0.001s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_REVOCATION_IDEMPOTENT
+--------------------------------------------------------------------------------
+
+🟡 WARNINGS:
+  20-May-2026 02:49:21.559 WARNING [http-nio-8080-exec-6] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+
+[TEST RESULT] PASS
+Duration: 0.06s | Requests: 8
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_INVALID_GRANT_TYPE
+Description: Verify proper OAuth2 error for invalid/unsupported grant_type (C4)
+Start: 2026-05-20 10:49:21
+====================================================================================================
+
+[HTTP REQUEST] Token with grant_type=invalid_grant
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0001 | Timestamp: 2026-05-20 10:49:21.644
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: invalid_grant_type_xyz
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  code: test-code
+  redirect_uri: http://127.0.0.1:7777/callback
+
+[HTTP RESPONSE] Token with grant_type=invalid_grant
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0001 | Timestamp: 2026-05-20 10:49:21.647
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "unauthorized_client"
+}
+
+[HTTP REQUEST] Token with grant_type=empty_grant
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0002 | Timestamp: 2026-05-20 10:49:21.647
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: 
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Token with grant_type=empty_grant
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0002 | Timestamp: 2026-05-20 10:49:21.649
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "unauthorized_client"
+}
+
+[HTTP REQUEST] Token with grant_type=null_like_grant
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0003 | Timestamp: 2026-05-20 10:49:21.649
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: null
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  code: test-code
+  redirect_uri: http://127.0.0.1:7777/callback
+
+[HTTP RESPONSE] Token with grant_type=null_like_grant
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0003 | Timestamp: 2026-05-20 10:49:21.651
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "unauthorized_client"
+}
+
+[HTTP REQUEST] Token with grant_type=case_mismatch
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0004 | Timestamp: 2026-05-20 10:49:21.651
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: AUTHORIZATION_CODE
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  code: test-code
+  redirect_uri: http://127.0.0.1:7777/callback
+
+[HTTP RESPONSE] Token with grant_type=case_mismatch
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0004 | Timestamp: 2026-05-20 10:49:21.653
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "unauthorized_client"
+}
+
+[HTTP REQUEST] Token with grant_type=code_injection
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0005 | Timestamp: 2026-05-20 10:49:21.654
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code' OR '1'='1
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  code: test-code
+  redirect_uri: http://127.0.0.1:7777/callback
+
+[HTTP RESPONSE] Token with grant_type=code_injection
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0005 | Timestamp: 2026-05-20 10:49:21.656
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "unauthorized_client"
+}
+
+[HTTP REQUEST] Token with grant_type=script_injection
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0006 | Timestamp: 2026-05-20 10:49:21.656
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code<script>alert(1)</script>
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+  code: test-code
+  redirect_uri: http://127.0.0.1:7777/callback
+
+[HTTP RESPONSE] Token with grant_type=script_injection
+Request ID: REQ-CXF_INVALID_GRANT_TYPE-0006 | Timestamp: 2026-05-20 10:49:21.658
+Elapsed: 0.001s
+--------------------------------------------------------------------------------
+Status Code: 400
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "unauthorized_client"
+}
+
+[TEST RESULT] PASS
+Duration: 0.05s | Requests: 6
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_CLIENT_SECRET
+Description: Verify wrong client_secret is rejected on token endpoint
+Start: 2026-05-20 10:49:21
+====================================================================================================
+
+[HTTP REQUEST] CXF authorize (warm_up)
+Request ID: REQ-CXF_CLIENT_SECRET-0001 | Timestamp: 2026-05-20 10:49:21.737
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid+read_resource&state=cxf-warmup
+
+[HTTP RESPONSE] CXF authorize (warm_up)
+Request ID: REQ-CXF_CLIENT_SECRET-0001 | Timestamp: 2026-05-20 10:49:21.740
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 303
+
+Response Headers:
+  Location: http://127.0.0.1:7777/callback?state=cxf-warmup&code=4b65b07e6efbdc6eea7c71c9854e778036c4c6f7e7d9f34e73ca3aea76510615
+
+[HTTP REQUEST] CXF token exchange (warm_up)
+Request ID: REQ-CXF_CLIENT_SECRET-0002 | Timestamp: 2026-05-20 10:49:21.740
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: 4b65b07e6efbdc6eea7c71c9854e778036c4c6f7e7d9f34e73ca3aea76510615
+  redirect_uri: http://127.0.0.1:7777/callback
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] CXF token exchange (warm_up)
+Request ID: REQ-CXF_CLIENT_SECRET-0002 | Timestamp: 2026-05-20 10:49:21.742
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "8a9b30fb2075980f91fb60bca1291d910f3adea59ed169eb47a214ed384c2f85",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "openid read_resource"
+}
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_CLIENT_SECRET
+--------------------------------------------------------------------------------
+
+🟡 WARNINGS:
+  20-May-2026 02:49:21.739 WARNING [http-nio-8080-exec-3] org.apache.cxf.rs.security.oauth2.services.AbstractOAuthService.checkTransportSecurity Unsecure HTTP, HTTPS is recommended
+
+[TEST RESULT] PASS
+Duration: 0.05s | Requests: 2
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_CRLF_WWW_AUTHENTICATE
+Description: Verify WWW-Authenticate realm is not vulnerable to CRLF injection (V4)
+Start: 2026-05-20 10:49:21
+====================================================================================================
+
+[HTTP REQUEST] CRLF probe: crlf_basic
+Request ID: REQ-CXF_CRLF_WWW_AUTHENTICATE-0001 | Timestamp: 2026-05-20 10:49:21.813
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Bearer 
+X-Injected: true...
+
+Request Body:
+  token: 
+X-Injected: true
+
+[HTTP REQUEST] CRLF probe: crlf_encoded
+Request ID: REQ-CXF_CRLF_WWW_AUTHENTICATE-0002 | Timestamp: 2026-05-20 10:49:21.813
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Bearer %0d%0aX-Injected:%20true...
+
+Request Body:
+  token: %0d%0aX-Injected:%20true
+
+[HTTP RESPONSE] CRLF probe: crlf_encoded
+Request ID: REQ-CXF_CRLF_WWW_AUTHENTICATE-0002 | Timestamp: 2026-05-20 10:49:21.816
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] CRLF probe: lf_only
+Request ID: REQ-CXF_CRLF_WWW_AUTHENTICATE-0003 | Timestamp: 2026-05-20 10:49:21.816
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Bearer 
+X-Injected: true...
+
+Request Body:
+  token: 
+X-Injected: true
+
+[HTTP REQUEST] CRLF probe: crlf_header_smuggle
+Request ID: REQ-CXF_CRLF_WWW_AUTHENTICATE-0004 | Timestamp: 2026-05-20 10:49:21.816
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Bearer 
+Content-Length: 0
+
+...
+
+Request Body:
+  token: 
+Content-Length: 0
+
+
+
+[HTTP REQUEST] CRLF probe: crlf_cache_poison
+Request ID: REQ-CXF_CRLF_WWW_AUTHENTICATE-0005 | Timestamp: 2026-05-20 10:49:21.817
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Bearer 
+X-Cache: poisoned...
+
+Request Body:
+  token: 
+X-Cache: poisoned
+
+[HTTP REQUEST] Token endpoint with missing secret for 401
+Request ID: REQ-CXF_CRLF_WWW_AUTHENTICATE-0006 | Timestamp: 2026-05-20 10:49:21.817
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: test
+  client_id: fuzz-client
+
+[HTTP RESPONSE] Token endpoint with missing secret for 401
+Request ID: REQ-CXF_CRLF_WWW_AUTHENTICATE-0006 | Timestamp: 2026-05-20 10:49:21.820
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 401
+
+Response Headers:
+  WWW-Authenticate: Basic
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_CRLF_WWW_AUTHENTICATE
+--------------------------------------------------------------------------------
+
+🔴 ERRORS:
+  20-May-2026 02:49:21.819 WARNING [http-nio-8080-exec-1] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.NotAuthorizedException: HTTP 401 Unauthorized
+  	at org.apache.cxf.jaxrs.utils.SpecExceptions.toNotAuthorizedException(SpecExceptions.java:94)
+  	at org.apache.cxf.jaxrs.utils.ExceptionUtils.toNotAuthorizedException(ExceptionUtils.java:136)
+  	at org.apache.cxf.rs.security.oauth2.utils.AuthorizationUtils.throwAuthorizationFailure(AuthorizationUtils.java:117)
+  	at org.apache.cxf.rs.security.oauth2.utils.AuthorizationUtils.throwAuthorizationFailure(AuthorizationUtils.java:92)
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+
+🟡 WARNINGS:
+  20-May-2026 02:49:21.815 WARNING [http-nio-8080-exec-9] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[TEST RESULT] PASS
+Duration: 0.05s | Requests: 6
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_INFO_LEAK_401
+Description: Verify 401 responses do not leak internal error details (V5)
+Start: 2026-05-20 10:49:21
+====================================================================================================
+
+[HTTP REQUEST] Info leak probe: no_auth_introspect
+Request ID: REQ-CXF_INFO_LEAK_401-0001 | Timestamp: 2026-05-20 10:49:21.888
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: test
+
+[HTTP RESPONSE] Info leak probe: no_auth_introspect
+Request ID: REQ-CXF_INFO_LEAK_401-0001 | Timestamp: 2026-05-20 10:49:21.891
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Info leak probe: malformed_auth
+Request ID: REQ-CXF_INFO_LEAK_401-0002 | Timestamp: 2026-05-20 10:49:21.891
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: authorization_code
+  code: invalid
+  client_id: fuzz-client
+  client_secret: wrong-secret...
+
+[HTTP RESPONSE] Info leak probe: malformed_auth
+Request ID: REQ-CXF_INFO_LEAK_401-0002 | Timestamp: 2026-05-20 10:49:21.893
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 401
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "error": "invalid_client"
+}
+
+[HTTP REQUEST] Info leak probe: no_client_id
+Request ID: REQ-CXF_INFO_LEAK_401-0003 | Timestamp: 2026-05-20 10:49:21.893
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+
+[HTTP RESPONSE] Info leak probe: no_client_id
+Request ID: REQ-CXF_INFO_LEAK_401-0003 | Timestamp: 2026-05-20 10:49:21.895
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 401
+
+Response Headers:
+  WWW-Authenticate: Basic
+
+[HTTP REQUEST] Info leak probe: empty_params
+Request ID: REQ-CXF_INFO_LEAK_401-0004 | Timestamp: 2026-05-20 10:49:21.895
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+[HTTP RESPONSE] Info leak probe: empty_params
+Request ID: REQ-CXF_INFO_LEAK_401-0004 | Timestamp: 2026-05-20 10:49:21.898
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 415
+
+Response Headers:
+
+[HTTP REQUEST] Info leak probe: invalid_basic_auth
+Request ID: REQ-CXF_INFO_LEAK_401-0005 | Timestamp: 2026-05-20 10:49:21.898
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Headers:
+  Authorization: Basic aW52YWxpZDp4...
+
+Request Body:
+  token: test
+
+[HTTP RESPONSE] Info leak probe: invalid_basic_auth
+Request ID: REQ-CXF_INFO_LEAK_401-0005 | Timestamp: 2026-05-20 10:49:21.900
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_INFO_LEAK_401
+--------------------------------------------------------------------------------
+
+🔴 ERRORS:
+  20-May-2026 02:49:21.895 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.NotAuthorizedException: HTTP 401 Unauthorized
+  	at org.apache.cxf.jaxrs.utils.SpecExceptions.toNotAuthorizedException(SpecExceptions.java:94)
+  	at org.apache.cxf.jaxrs.utils.ExceptionUtils.toNotAuthorizedException(ExceptionUtils.java:136)
+  	at org.apache.cxf.rs.security.oauth2.utils.AuthorizationUtils.throwAuthorizationFailure(AuthorizationUtils.java:117)
+  	at org.apache.cxf.rs.security.oauth2.utils.AuthorizationUtils.throwAuthorizationFailure(AuthorizationUtils.java:92)
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:49:21.897 WARNING [http-nio-8080-exec-1] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+
+🟡 WARNINGS:
+  20-May-2026 02:49:21.890 WARNING [http-nio-8080-exec-4] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:21.900 WARNING [http-nio-8080-exec-10] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[TEST RESULT] PASS
+Duration: 0.05s | Requests: 5
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_LOG_INJECTION_CLIENT_ID
+Description: Verify client_id with injection payloads is safely handled (V6)
+Start: 2026-05-20 10:49:21
+====================================================================================================
+
+[HTTP REQUEST] Log injection probe: newline
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0001 | Timestamp: 2026-05-20 10:49:21.974
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: alice
+[FAKE] Admin login successful
+
+[HTTP RESPONSE] Log injection probe: newline
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0001 | Timestamp: 2026-05-20 10:49:21.979
+Elapsed: 0.005s
+--------------------------------------------------------------------------------
+Status Code: 500
+⚠️ SERVER ERROR DETECTED
+
+Response Headers:
+  Content-Type: text/html;charset=utf-8
+  Content-Language: en
+  Content-Length: 3039
+  Date: Wed, 20 May 2026 02:49:21 GMT
+  Connection: close
+
+Response Body:
+<!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 500 – Internal Server Error</h1><hr class="line" /><p><b>Type</b> Exception Report</p><p><b>Description</b> The server encountered an unexpected condition that prevented it from fulfilling the request.</p><p><b>Exception</b></p><pre>java.lang.NullPointerException
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.isValidPublicClient(AbstractTokenService.java:147)
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.authenticateClientIfNeeded(AbstractTokenService.java:72)
+	org.apache.cxf.rs.security.oauth2.services.AccessTokenService.handleTokenRequest(AccessTokenService.java:98)
+	jdk.internal.reflect.GeneratedMethodAccessor26.invoke(Unknown Source)
+	java.base&#47;jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.base&#47;java.lang.reflect.Method.invoke(Method.java:566)
+	org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:179)
+	org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:96)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:201)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:104)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor.handleMessage(ServiceInvokerInterceptor.java:96)
+	org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	org.apache.cxf.transport.ChainInitiationObserver.onMessage(ChainInitiationObserver.java:121)
+	org.apache.cxf.transport.http.AbstractHTTPDestination.invoke(AbstractHTTPDestination.java:265)
+	org.apache.cxf.transport.servlet.ServletController.invokeDestination(ServletController.java:234)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:208)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:160)
+	org.apache.cxf.transport.servlet.CXFNonSpringServlet.invoke(CXFNonSpringServlet.java:225)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.handleRequest(AbstractHTTPServlet.java:304)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.doPost(AbstractHTTPServlet.java:217)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.service(AbstractHTTPServlet.java:279)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	fuzz.cxf.MockAuthFilter.doFilter(MockAuthFilter.java:55)
+</pre><p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p><hr class="line" /><h3>Apache Tomcat/9.0.118</h3></body></html>
+
+[ERROR PATTERN ANALYSIS]
+  No specific error patterns detected.
+
+[HTTP REQUEST] Log injection probe: crlf
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0002 | Timestamp: 2026-05-20 10:49:21.980
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: bob
+[FAKE] Security alert bypassed
+
+[HTTP RESPONSE] Log injection probe: crlf
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0002 | Timestamp: 2026-05-20 10:49:21.983
+Elapsed: 0.003s
+--------------------------------------------------------------------------------
+Status Code: 500
+⚠️ SERVER ERROR DETECTED
+
+Response Headers:
+  Content-Type: text/html;charset=utf-8
+  Content-Language: en
+  Content-Length: 3039
+  Date: Wed, 20 May 2026 02:49:21 GMT
+  Connection: close
+
+Response Body:
+<!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 500 – Internal Server Error</h1><hr class="line" /><p><b>Type</b> Exception Report</p><p><b>Description</b> The server encountered an unexpected condition that prevented it from fulfilling the request.</p><p><b>Exception</b></p><pre>java.lang.NullPointerException
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.isValidPublicClient(AbstractTokenService.java:147)
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.authenticateClientIfNeeded(AbstractTokenService.java:72)
+	org.apache.cxf.rs.security.oauth2.services.AccessTokenService.handleTokenRequest(AccessTokenService.java:98)
+	jdk.internal.reflect.GeneratedMethodAccessor26.invoke(Unknown Source)
+	java.base&#47;jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.base&#47;java.lang.reflect.Method.invoke(Method.java:566)
+	org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:179)
+	org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:96)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:201)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:104)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor.handleMessage(ServiceInvokerInterceptor.java:96)
+	org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	org.apache.cxf.transport.ChainInitiationObserver.onMessage(ChainInitiationObserver.java:121)
+	org.apache.cxf.transport.http.AbstractHTTPDestination.invoke(AbstractHTTPDestination.java:265)
+	org.apache.cxf.transport.servlet.ServletController.invokeDestination(ServletController.java:234)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:208)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:160)
+	org.apache.cxf.transport.servlet.CXFNonSpringServlet.invoke(CXFNonSpringServlet.java:225)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.handleRequest(AbstractHTTPServlet.java:304)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.doPost(AbstractHTTPServlet.java:217)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.service(AbstractHTTPServlet.java:279)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	fuzz.cxf.MockAuthFilter.doFilter(MockAuthFilter.java:55)
+</pre><p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p><hr class="line" /><h3>Apache Tomcat/9.0.118</h3></body></html>
+
+[ERROR PATTERN ANALYSIS]
+  No specific error patterns detected.
+
+[HTTP REQUEST] Log injection probe: unicode_newline
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0003 | Timestamp: 2026-05-20 10:49:21.983
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: eve [FAKE] Token issued for admin
+
+[HTTP RESPONSE] Log injection probe: unicode_newline
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0003 | Timestamp: 2026-05-20 10:49:21.986
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 500
+⚠️ SERVER ERROR DETECTED
+
+Response Headers:
+  Content-Type: text/html;charset=utf-8
+  Content-Language: en
+  Content-Length: 3039
+  Date: Wed, 20 May 2026 02:49:21 GMT
+  Connection: close
+
+Response Body:
+<!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 500 – Internal Server Error</h1><hr class="line" /><p><b>Type</b> Exception Report</p><p><b>Description</b> The server encountered an unexpected condition that prevented it from fulfilling the request.</p><p><b>Exception</b></p><pre>java.lang.NullPointerException
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.isValidPublicClient(AbstractTokenService.java:147)
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.authenticateClientIfNeeded(AbstractTokenService.java:72)
+	org.apache.cxf.rs.security.oauth2.services.AccessTokenService.handleTokenRequest(AccessTokenService.java:98)
+	jdk.internal.reflect.GeneratedMethodAccessor26.invoke(Unknown Source)
+	java.base&#47;jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.base&#47;java.lang.reflect.Method.invoke(Method.java:566)
+	org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:179)
+	org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:96)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:201)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:104)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor.handleMessage(ServiceInvokerInterceptor.java:96)
+	org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	org.apache.cxf.transport.ChainInitiationObserver.onMessage(ChainInitiationObserver.java:121)
+	org.apache.cxf.transport.http.AbstractHTTPDestination.invoke(AbstractHTTPDestination.java:265)
+	org.apache.cxf.transport.servlet.ServletController.invokeDestination(ServletController.java:234)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:208)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:160)
+	org.apache.cxf.transport.servlet.CXFNonSpringServlet.invoke(CXFNonSpringServlet.java:225)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.handleRequest(AbstractHTTPServlet.java:304)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.doPost(AbstractHTTPServlet.java:217)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.service(AbstractHTTPServlet.java:279)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	fuzz.cxf.MockAuthFilter.doFilter(MockAuthFilter.java:55)
+</pre><p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p><hr class="line" /><h3>Apache Tomcat/9.0.118</h3></body></html>
+
+[ERROR PATTERN ANALYSIS]
+  No specific error patterns detected.
+
+[HTTP REQUEST] Log injection probe: tab_injection
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0004 | Timestamp: 2026-05-20 10:49:21.986
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: mallory	[FAKE]	Privilege escalation
+
+[HTTP RESPONSE] Log injection probe: tab_injection
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0004 | Timestamp: 2026-05-20 10:49:21.989
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 500
+⚠️ SERVER ERROR DETECTED
+
+Response Headers:
+  Content-Type: text/html;charset=utf-8
+  Content-Language: en
+  Content-Length: 3039
+  Date: Wed, 20 May 2026 02:49:21 GMT
+  Connection: close
+
+Response Body:
+<!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 500 – Internal Server Error</h1><hr class="line" /><p><b>Type</b> Exception Report</p><p><b>Description</b> The server encountered an unexpected condition that prevented it from fulfilling the request.</p><p><b>Exception</b></p><pre>java.lang.NullPointerException
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.isValidPublicClient(AbstractTokenService.java:147)
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.authenticateClientIfNeeded(AbstractTokenService.java:72)
+	org.apache.cxf.rs.security.oauth2.services.AccessTokenService.handleTokenRequest(AccessTokenService.java:98)
+	jdk.internal.reflect.GeneratedMethodAccessor26.invoke(Unknown Source)
+	java.base&#47;jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.base&#47;java.lang.reflect.Method.invoke(Method.java:566)
+	org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:179)
+	org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:96)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:201)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:104)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor.handleMessage(ServiceInvokerInterceptor.java:96)
+	org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	org.apache.cxf.transport.ChainInitiationObserver.onMessage(ChainInitiationObserver.java:121)
+	org.apache.cxf.transport.http.AbstractHTTPDestination.invoke(AbstractHTTPDestination.java:265)
+	org.apache.cxf.transport.servlet.ServletController.invokeDestination(ServletController.java:234)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:208)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:160)
+	org.apache.cxf.transport.servlet.CXFNonSpringServlet.invoke(CXFNonSpringServlet.java:225)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.handleRequest(AbstractHTTPServlet.java:304)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.doPost(AbstractHTTPServlet.java:217)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.service(AbstractHTTPServlet.java:279)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	fuzz.cxf.MockAuthFilter.doFilter(MockAuthFilter.java:55)
+</pre><p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p><hr class="line" /><h3>Apache Tomcat/9.0.118</h3></body></html>
+
+[ERROR PATTERN ANALYSIS]
+  No specific error patterns detected.
+
+[HTTP REQUEST] Log injection probe: null_byte
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0005 | Timestamp: 2026-05-20 10:49:21.989
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: attacker hidden
+
+[HTTP RESPONSE] Log injection probe: null_byte
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0005 | Timestamp: 2026-05-20 10:49:21.994
+Elapsed: 0.005s
+--------------------------------------------------------------------------------
+Status Code: 500
+⚠️ SERVER ERROR DETECTED
+
+Response Headers:
+  Content-Type: text/html;charset=utf-8
+  Content-Language: en
+  Content-Length: 3039
+  Date: Wed, 20 May 2026 02:49:21 GMT
+  Connection: close
+
+Response Body:
+<!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 500 – Internal Server Error</h1><hr class="line" /><p><b>Type</b> Exception Report</p><p><b>Description</b> The server encountered an unexpected condition that prevented it from fulfilling the request.</p><p><b>Exception</b></p><pre>java.lang.NullPointerException
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.isValidPublicClient(AbstractTokenService.java:147)
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.authenticateClientIfNeeded(AbstractTokenService.java:72)
+	org.apache.cxf.rs.security.oauth2.services.AccessTokenService.handleTokenRequest(AccessTokenService.java:98)
+	jdk.internal.reflect.GeneratedMethodAccessor26.invoke(Unknown Source)
+	java.base&#47;jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.base&#47;java.lang.reflect.Method.invoke(Method.java:566)
+	org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:179)
+	org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:96)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:201)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:104)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor.handleMessage(ServiceInvokerInterceptor.java:96)
+	org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	org.apache.cxf.transport.ChainInitiationObserver.onMessage(ChainInitiationObserver.java:121)
+	org.apache.cxf.transport.http.AbstractHTTPDestination.invoke(AbstractHTTPDestination.java:265)
+	org.apache.cxf.transport.servlet.ServletController.invokeDestination(ServletController.java:234)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:208)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:160)
+	org.apache.cxf.transport.servlet.CXFNonSpringServlet.invoke(CXFNonSpringServlet.java:225)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.handleRequest(AbstractHTTPServlet.java:304)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.doPost(AbstractHTTPServlet.java:217)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.service(AbstractHTTPServlet.java:279)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	fuzz.cxf.MockAuthFilter.doFilter(MockAuthFilter.java:55)
+</pre><p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p><hr class="line" /><h3>Apache Tomcat/9.0.118</h3></body></html>
+
+[ERROR PATTERN ANALYSIS]
+  No specific error patterns detected.
+
+[HTTP REQUEST] Log injection probe: backspace_carriage
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0006 | Timestamp: 2026-05-20 10:49:21.995
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: user[FAKE] New log entry
+
+[HTTP RESPONSE] Log injection probe: backspace_carriage
+Request ID: REQ-CXF_LOG_INJECTION_CLIENT_ID-0006 | Timestamp: 2026-05-20 10:49:21.999
+Elapsed: 0.004s
+--------------------------------------------------------------------------------
+Status Code: 500
+⚠️ SERVER ERROR DETECTED
+
+Response Headers:
+  Content-Type: text/html;charset=utf-8
+  Content-Language: en
+  Content-Length: 3039
+  Date: Wed, 20 May 2026 02:49:21 GMT
+  Connection: close
+
+Response Body:
+<!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 500 – Internal Server Error</h1><hr class="line" /><p><b>Type</b> Exception Report</p><p><b>Description</b> The server encountered an unexpected condition that prevented it from fulfilling the request.</p><p><b>Exception</b></p><pre>java.lang.NullPointerException
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.isValidPublicClient(AbstractTokenService.java:147)
+	org.apache.cxf.rs.security.oauth2.services.AbstractTokenService.authenticateClientIfNeeded(AbstractTokenService.java:72)
+	org.apache.cxf.rs.security.oauth2.services.AccessTokenService.handleTokenRequest(AccessTokenService.java:98)
+	jdk.internal.reflect.GeneratedMethodAccessor26.invoke(Unknown Source)
+	java.base&#47;jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.base&#47;java.lang.reflect.Method.invoke(Method.java:566)
+	org.apache.cxf.service.invoker.AbstractInvoker.performInvocation(AbstractInvoker.java:179)
+	org.apache.cxf.service.invoker.AbstractInvoker.invoke(AbstractInvoker.java:96)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:201)
+	org.apache.cxf.jaxrs.JAXRSInvoker.invoke(JAXRSInvoker.java:104)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor$1.run(ServiceInvokerInterceptor.java:59)
+	org.apache.cxf.interceptor.ServiceInvokerInterceptor.handleMessage(ServiceInvokerInterceptor.java:96)
+	org.apache.cxf.phase.PhaseInterceptorChain.doIntercept(PhaseInterceptorChain.java:307)
+	org.apache.cxf.transport.ChainInitiationObserver.onMessage(ChainInitiationObserver.java:121)
+	org.apache.cxf.transport.http.AbstractHTTPDestination.invoke(AbstractHTTPDestination.java:265)
+	org.apache.cxf.transport.servlet.ServletController.invokeDestination(ServletController.java:234)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:208)
+	org.apache.cxf.transport.servlet.ServletController.invoke(ServletController.java:160)
+	org.apache.cxf.transport.servlet.CXFNonSpringServlet.invoke(CXFNonSpringServlet.java:225)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.handleRequest(AbstractHTTPServlet.java:304)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.doPost(AbstractHTTPServlet.java:217)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+	org.apache.cxf.transport.servlet.AbstractHTTPServlet.service(AbstractHTTPServlet.java:279)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	fuzz.cxf.MockAuthFilter.doFilter(MockAuthFilter.java:55)
+</pre><p><b>Note</b> The full stack trace of the root cause is available in the server logs.</p><hr class="line" /><h3>Apache Tomcat/9.0.118</h3></body></html>
+
+[ERROR PATTERN ANALYSIS]
+  No specific error patterns detected.
+
+[SECURITY FINDING]
+--------------------------------------------------------------------------------
+Severity: LOW
+Issue: client_id parameter values are unsafely concatenated into log messages
+Impact: Minor security issue requiring further assessment
+CWE: CWE-117 (Improper Output Neutralization for Logs)
+Recommendation: Sanitize clientId before logging; strip newlines and control chars
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║ DETAILED FAILURE EVIDENCE: CXF_LOG_INJECTION_CLIENT_ID                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Test: CXF_LOG_INJECTION_CLIENT_ID
+Timestamp: 2026-05-20 10:49:21
+Total Requests in Test: 6
+
+[FINDING DETAILS]
+--------------------------------------------------------------------------------
+  issue: client_id parameter values are unsafely concatenated into log messages
+  static_evidence: AbstractTokenService.java:260,267 — LOG.warning("No valid client found for clientId: " + clientId) without sanitization
+  code_location: AbstractTokenService.java:260,267
+  cwe: CWE-117 (Improper Output Neutralization for Logs)
+  responses:
+    [
+        {
+            "probe": "newline",
+            "payload": "alice\n[FAKE] Admin login successful",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+        },
+        {
+            "probe": "crlf",
+            "payload": "bob\r\n[FAKE] Security alert bypassed",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+        },
+        {
+            "probe": "unicode_newline",
+            "payload": "eve [FAKE] Token issued for admin",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+        },
+        {
+            "probe": "tab_injection",
+            "payload": "mallory\t[FAKE]\tPrivilege escalation",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+        },
+        {
+            "probe": "null_byte",
+            "payload": "attacker\u0000hidden",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+        },
+        {
+            "probe": "backspace_carriage",
+            "payload": "user\r[FAKE] New log entry",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+        }
+    ]
+  note: Log injection effect cannot be verified externally — confirmed via static code review
+  recommendation: Sanitize clientId before logging; strip newlines and control chars
+
+[SERVER-SIDE ERROR LOGS]
+--------------------------------------------------------------------------------
+  Found 11 error line(s):
+
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.997 WARNING [http-nio-8080-exec-10] org.apache.cxf.phase.PhaseInterceptorChain.doDefaultLogging Application {http://cxf.fuzz/}AutoApproveAuthorizationCodeService has thrown exception, unwinding now
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.998 WARNING [http-nio-8080-exec-10] org.apache.cxf.phase.PhaseInterceptorChain.unwind Exception in handleFault on interceptor org.apache.cxf.jaxrs.interceptor.JAXRSDefaultFaultOutInterceptor@544b8f03
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.998 SEVERE [http-nio-8080-exec-10] org.apache.cxf.interceptor.AbstractFaultChainInitiatorObserver.onMessage An unexpected error occurred during error handling. No further error processing will occur.
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+
+[REPRODUCTION NOTES]
+--------------------------------------------------------------------------------
+  Issue Summary: client_id parameter values are unsafely concatenated into log messages
+  Recommended Fix: Sanitize clientId before logging; strip newlines and control chars
+  Evidence Log: cxf_poc_evidence.log
+  Requests Captured: 6
+
+================================================================================
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_LOG_INJECTION_CLIENT_ID
+--------------------------------------------------------------------------------
+
+🔴 ERRORS:
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.990 WARNING [http-nio-8080-exec-8] org.apache.cxf.phase.PhaseInterceptorChain.doDefaultLogging Application {http://cxf.fuzz/}AutoApproveAuthorizationCodeService has thrown exception, unwinding now
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.994 WARNING [http-nio-8080-exec-8] org.apache.cxf.phase.PhaseInterceptorChain.unwind Exception in handleFault on interceptor org.apache.cxf.jaxrs.interceptor.JAXRSDefaultFaultOutInterceptor@544b8f03
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.994 SEVERE [http-nio-8080-exec-8] org.apache.cxf.interceptor.AbstractFaultChainInitiatorObserver.onMessage An unexpected error occurred during error handling. No further error processing will occur.
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.997 WARNING [http-nio-8080-exec-10] org.apache.cxf.phase.PhaseInterceptorChain.doDefaultLogging Application {http://cxf.fuzz/}AutoApproveAuthorizationCodeService has thrown exception, unwinding now
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.998 WARNING [http-nio-8080-exec-10] org.apache.cxf.phase.PhaseInterceptorChain.unwind Exception in handleFault on interceptor org.apache.cxf.jaxrs.interceptor.JAXRSDefaultFaultOutInterceptor@544b8f03
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+  20-May-2026 02:49:21.998 SEVERE [http-nio-8080-exec-10] org.apache.cxf.interceptor.AbstractFaultChainInitiatorObserver.onMessage An unexpected error occurred during error handling. No further error processing will occur.
+  		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  	Caused by: java.lang.NullPointerException
+
+[TEST RESULT] FAIL
+Duration: 0.08s | Requests: 6
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_CONCURRENT_REFRESH_TOCTOU
+Description: Verify refresh token concurrent usage protection (V9)
+Start: 2026-05-20 10:49:22
+====================================================================================================
+
+[HTTP REQUEST] Get refresh token for race test
+Request ID: REQ-CXF_CONCURRENT_REFRESH_TOCTOU-0001 | Timestamp: 2026-05-20 10:49:22.086
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+Request Body:
+  grant_type: password
+  username: alice
+  password: alice...
+  client_id: fuzz-client
+  client_secret: fuzz-client-secret...
+
+[HTTP RESPONSE] Get refresh token for race test
+Request ID: REQ-CXF_CONCURRENT_REFRESH_TOCTOU-0001 | Timestamp: 2026-05-20 10:49:22.088
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "access_token": "7e642b52865b38b6e7d9c10db028d1f278eba45735e4a51382892916b40a4ee6",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+
+[TEST RESULT] PASS
+Duration: 0.04s | Requests: 1
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_INTROSPECTION_EDGE_CASES
+Description: Verify introspection handles edge cases safely
+Start: 2026-05-20 10:49:22
+====================================================================================================
+
+[HTTP REQUEST] Introspect edge: empty_token
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0001 | Timestamp: 2026-05-20 10:49:22.161
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: 
+
+[HTTP RESPONSE] Introspect edge: empty_token
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0001 | Timestamp: 2026-05-20 10:49:22.163
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Introspect edge: very_long_token
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0002 | Timestamp: 2026-05-20 10:49:22.163
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA... (len=8192)
+
+[HTTP RESPONSE] Introspect edge: very_long_token
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0002 | Timestamp: 2026-05-20 10:49:22.165
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Introspect edge: unicode_token
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0003 | Timestamp: 2026-05-20 10:49:22.166
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token:  Ã¿Ä
+
+[HTTP RESPONSE] Introspect edge: unicode_token
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0003 | Timestamp: 2026-05-20 10:49:22.167
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Introspect edge: json_injection
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0004 | Timestamp: 2026-05-20 10:49:22.168
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: {"active": true, "scope": "admin"}
+
+[HTTP RESPONSE] Introspect edge: json_injection
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0004 | Timestamp: 2026-05-20 10:49:22.169
+Elapsed: 0.001s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Introspect edge: jwt_alg_none
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0005 | Timestamp: 2026-05-20 10:49:22.169
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiJ9.
+
+[HTTP RESPONSE] Introspect edge: jwt_alg_none
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0005 | Timestamp: 2026-05-20 10:49:22.171
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[HTTP REQUEST] Introspect edge: double_base64
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0006 | Timestamp: 2026-05-20 10:49:22.171
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+Request Body:
+  token: ZXlKMFpYTjBJam94ZlE9PQ==
+
+[HTTP RESPONSE] Introspect edge: double_base64
+Request ID: REQ-CXF_INTROSPECTION_EDGE_CASES-0006 | Timestamp: 2026-05-20 10:49:22.173
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 200
+
+Response Headers:
+  Content-Type: application/json
+
+Response Body:
+{
+  "active": false
+}
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_INTROSPECTION_EDGE_CASES
+--------------------------------------------------------------------------------
+
+🟡 WARNINGS:
+  20-May-2026 02:49:22.162 WARNING [http-nio-8080-exec-9] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:22.165 WARNING [http-nio-8080-exec-1] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:22.167 WARNING [http-nio-8080-exec-10] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:22.169 WARNING [http-nio-8080-exec-2] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:22.171 WARNING [http-nio-8080-exec-5] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+  20-May-2026 02:49:22.173 WARNING [http-nio-8080-exec-7] org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService.checkSecurityContext Authenticated Principal is not available
+
+[TEST RESULT] PASS
+Duration: 0.05s | Requests: 6
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_EXCEPTION_MAPPER_HTTP_200
+Description: Verify OAuthServiceExceptionMapper returns proper error codes
+Start: 2026-05-20 10:49:22
+====================================================================================================
+
+[HTTP REQUEST] GET /services/oauth2/jwks
+Request ID: REQ-CXF_EXCEPTION_MAPPER_HTTP_200-0001 | Timestamp: 2026-05-20 10:49:22.255
+--------------------------------------------------------------------------------
+Method: GET
+URL: http://127.0.0.1:8081/services/oauth2/jwks
+
+[HTTP RESPONSE] GET /services/oauth2/jwks
+Request ID: REQ-CXF_EXCEPTION_MAPPER_HTTP_200-0001 | Timestamp: 2026-05-20 10:49:22.257
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 404
+
+Response Headers:
+
+[HTTP REQUEST] POST /services/oauth2/token (empty)
+Request ID: REQ-CXF_EXCEPTION_MAPPER_HTTP_200-0002 | Timestamp: 2026-05-20 10:49:22.257
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/token
+
+[HTTP RESPONSE] POST /services/oauth2/token (empty)
+Request ID: REQ-CXF_EXCEPTION_MAPPER_HTTP_200-0002 | Timestamp: 2026-05-20 10:49:22.259
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 415
+
+Response Headers:
+
+[HTTP REQUEST] POST /services/oauth2/introspect (no token)
+Request ID: REQ-CXF_EXCEPTION_MAPPER_HTTP_200-0003 | Timestamp: 2026-05-20 10:49:22.260
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/introspect
+
+[HTTP RESPONSE] POST /services/oauth2/introspect (no token)
+Request ID: REQ-CXF_EXCEPTION_MAPPER_HTTP_200-0003 | Timestamp: 2026-05-20 10:49:22.261
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 415
+
+Response Headers:
+
+[HTTP REQUEST] POST /services/oauth2/revoke (no token)
+Request ID: REQ-CXF_EXCEPTION_MAPPER_HTTP_200-0004 | Timestamp: 2026-05-20 10:49:22.262
+--------------------------------------------------------------------------------
+Method: POST
+URL: http://127.0.0.1:8081/services/oauth2/revoke
+
+[HTTP RESPONSE] POST /services/oauth2/revoke (no token)
+Request ID: REQ-CXF_EXCEPTION_MAPPER_HTTP_200-0004 | Timestamp: 2026-05-20 10:49:22.264
+Elapsed: 0.002s
+--------------------------------------------------------------------------------
+Status Code: 415
+
+Response Headers:
+
+[SERVER LOGS - INCREMENTAL] Final logs for CXF_EXCEPTION_MAPPER_HTTP_200
+--------------------------------------------------------------------------------
+
+🔴 ERRORS:
+  20-May-2026 02:49:22.259 WARNING [http-nio-8080-exec-2] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:49:22.261 WARNING [http-nio-8080-exec-5] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+  20-May-2026 02:49:22.263 WARNING [http-nio-8080-exec-7] org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper.toResponse javax.ws.rs.WebApplicationException: HTTP 415 Unsupported Media Type
+  	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+
+[TEST RESULT] PASS
+Duration: 0.05s | Requests: 4
+
+====================================================================================================
+
+
+====================================================================================================
+Test: CXF_IP_BINDING_INVERTED
+Description: Document inverted IP binding check
+Start: 2026-05-20 10:49:22
+====================================================================================================
+
+[TEST RESULT] PASS
+Duration: 0.03s | Requests: 0
+
+====================================================================================================
+

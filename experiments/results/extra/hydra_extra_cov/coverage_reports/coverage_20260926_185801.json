@@ -1,0 +1,34 @@
+{
+  "lines_covered": 0,
+  "lines_total": 1100,
+  "coverage_percentage": 0.0,
+  "packages_covered": 0,
+  "packages_total": 0,
+  "statements_covered": 0,
+  "statements_total": 1100,
+  "package_coverage": {},
+  "endpoint_coverage": {},
+  "error_pattern_coverage": {},
+  "state_metrics": {
+    "unique_states": 5,
+    "response_codes": [
+      302,
+      400,
+      401,
+      404
+    ],
+    "endpoint_hits": {
+      "Authorize": 1,
+      "Login": 1,
+      "AuthCodeRedirect": 1,
+      "TokenExchange": 1,
+      "UserInfo": 1
+    },
+    "error_patterns": {},
+    "security_findings": 0,
+    "crash_events": 0,
+    "total_executions": 5
+  },
+  "security_findings": [],
+  "crash_events": []
+}

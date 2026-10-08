@@ -1,0 +1,7 @@
+{
+  "arm_dir": "baseline_s2",
+  "n_cases": 119,
+  "n_ok": 119,
+  "branch_pct": 9.263304812185206,
+  "instr_pct": 16.481204255992612
+}

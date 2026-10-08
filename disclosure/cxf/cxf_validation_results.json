@@ -1,0 +1,346 @@
+{
+  "timestamp": 1779245362.4014456,
+  "target": "cxf",
+  "total_tests": 17,
+  "passed": 13,
+  "failed": 4,
+  "inconclusive": 0,
+  "critical_failures": 0,
+  "high_failures": 1,
+  "critical_inconclusive": 0,
+  "results": [
+    {
+      "test": "CXF_PKCE_NOT_ENFORCED",
+      "severity": "LOW",
+      "passed": false,
+      "timestamp": 1779245360.3120327,
+      "details": {
+        "issue": "PKCE is not enforced for authorization code grants",
+        "evidence": "Authorization code issued without code_challenge parameter",
+        "cwe": "CWE-347 (Missing verification of cryptographic integrity)",
+        "rfc": "RFC 7636 §4.1 recommends PKCE for all auth code grants",
+        "code_location": "AuthorizationCodeGrantHandler.java — requireCodeVerifier defaults to false",
+        "recommendation": "Set requireCodeVerifier=true and expectCodeVerifierForPublicClients=true"
+      }
+    },
+    {
+      "test": "CXF_PLAIN_PKCE_ACCEPTED",
+      "severity": "LOW",
+      "passed": false,
+      "timestamp": 1779245360.4028928,
+      "details": {
+        "issue": "Plain PKCE code_challenge_method is accepted — S256 not enforced",
+        "evidence": "Authorization code issued with code_challenge_method=plain",
+        "rfc": "RFC 7636 §4.2 recommends S256 over plain",
+        "code_location": "AuthorizationCodeGrantHandler.java — PlainCodeVerifier is the default",
+        "recommendation": "Reject plain code_challenge_method; require S256"
+      }
+    },
+    {
+      "test": "CXF_INTROSPECTION_UNAUTH",
+      "severity": "HIGH",
+      "passed": false,
+      "timestamp": 1779245360.5959547,
+      "details": {
+        "issue": "Token introspection endpoint processes requests without authentication",
+        "vulnerable_probes": [
+          {
+            "auth": "no_auth",
+            "status": 200,
+            "response": "{\"active\":true,\"client_id\":\"fuzz-client\",\"username\":\"alice\",\"token_type\":\"Bearer\",\"scope\":\"openid read_resource\",\"iat\":1779245360,\"exp\":1779248960}"
+          },
+          {
+            "auth": "empty_bearer",
+            "status": 200,
+            "response": "{\"active\":true,\"client_id\":\"fuzz-client\",\"username\":\"alice\",\"token_type\":\"Bearer\",\"scope\":\"openid read_resource\",\"iat\":1779245360,\"exp\":1779248960}"
+          },
+          {
+            "auth": "invalid_bearer",
+            "status": 200,
+            "response": "{\"active\":true,\"client_id\":\"fuzz-client\",\"username\":\"alice\",\"token_type\":\"Bearer\",\"scope\":\"openid read_resource\",\"iat\":1779245360,\"exp\":1779248960}"
+          },
+          {
+            "auth": "basic_auth_client",
+            "status": 200,
+            "response": "{\"active\":true,\"client_id\":\"fuzz-client\",\"username\":\"alice\",\"token_type\":\"Bearer\",\"scope\":\"openid read_resource\",\"iat\":1779245360,\"exp\":1779248960}"
+          }
+        ],
+        "cwe": "CWE-306 (Missing Authentication for Critical Function)",
+        "root_cause": "TokenIntrospectionService.checkSecurityContext() calls ExceptionUtils.toNotAuthorizedException() but does not throw it",
+        "code_location": "TokenIntrospectionService.java:112-121",
+        "rfc": "RFC 7662 §2.1 requires client authentication",
+        "recommendation": "Fix checkSecurityContext() to throw the exception it creates"
+      }
+    },
+    {
+      "test": "CXF_PASSWORD_GRANT_SCOPES",
+      "severity": "LOW",
+      "passed": true,
+      "timestamp": 1779245360.6921957,
+      "details": {
+        "message": "Scope validation on password grant appears functional"
+      }
+    },
+    {
+      "test": "CXF_AUTH_CODE_REPLAY",
+      "severity": "HIGH",
+      "passed": true,
+      "timestamp": 1779245361.294163,
+      "details": {
+        "message": "Authorization code replay properly rejected (HTTP 400)"
+      }
+    },
+    {
+      "test": "CXF_REFRESH_TOKEN_REUSE",
+      "severity": "MEDIUM",
+      "passed": true,
+      "timestamp": 1779245361.375753,
+      "details": {
+        "message": "No refresh token issued — server does not support refresh token flow",
+        "note": "CXF InMemoryOAuthDataProvider does not create refresh tokens by default",
+        "recommendation": "Enable refresh token issuance if refresh token rotation is desired"
+      }
+    },
+    {
+      "test": "CXF_INTROSPECTION_JWT",
+      "severity": "LOW",
+      "passed": true,
+      "timestamp": 1779245361.4727068,
+      "details": {
+        "message": "Introspection returns well-formed response for active token",
+        "fields_present": [
+          "active",
+          "client_id",
+          "username",
+          "token_type",
+          "scope",
+          "iat",
+          "exp"
+        ]
+      }
+    },
+    {
+      "test": "CXF_REVOCATION_IDEMPOTENT",
+      "severity": "MEDIUM",
+      "passed": true,
+      "timestamp": 1779245361.5773768,
+      "details": {
+        "message": "All revocation requests returned 200 (RFC 7009 compliant)",
+        "note": "Empty catch block (C3) cannot be tested black-box — infrastructure errors would also return 200",
+        "code_location": "TokenRevocationService.java:64-68",
+        "results": [
+          {
+            "probe": "valid_access_token",
+            "status": 200,
+            "body": ""
+          },
+          {
+            "probe": "valid_access_token_again",
+            "status": 200,
+            "body": ""
+          },
+          {
+            "probe": "invalid_token",
+            "status": 200,
+            "body": ""
+          },
+          {
+            "probe": "empty_token",
+            "status": 200,
+            "body": ""
+          },
+          {
+            "probe": "null_hint",
+            "status": 200,
+            "body": ""
+          },
+          {
+            "probe": "wrong_hint",
+            "status": 200,
+            "body": ""
+          }
+        ]
+      }
+    },
+    {
+      "test": "CXF_INVALID_GRANT_TYPE",
+      "severity": "LOW",
+      "passed": true,
+      "timestamp": 1779245361.6584177,
+      "details": {
+        "message": "Invalid grant types return proper HTTP 400 OAuth2 errors"
+      }
+    },
+    {
+      "test": "CXF_CLIENT_SECRET",
+      "severity": "LOW",
+      "passed": true,
+      "timestamp": 1779245361.7432356,
+      "details": {
+        "message": "Wrong client_secret properly rejected"
+      }
+    },
+    {
+      "test": "CXF_CRLF_WWW_AUTHENTICATE",
+      "severity": "MEDIUM",
+      "passed": true,
+      "timestamp": 1779245361.8202872,
+      "details": {
+        "message": "No CRLF injection detected in WWW-Authenticate header",
+        "note": "V4 requires realm to be attacker-controlled (e.g. via DCR or admin config)",
+        "code_location": "AuthorizationUtils.java:108-109"
+      }
+    },
+    {
+      "test": "CXF_INFO_LEAK_401",
+      "severity": "LOW",
+      "passed": true,
+      "timestamp": 1779245361.9011261,
+      "details": {
+        "message": "No internal error details found in 401 response bodies",
+        "probes_tested": 5
+      }
+    },
+    {
+      "test": "CXF_LOG_INJECTION_CLIENT_ID",
+      "severity": "LOW",
+      "passed": false,
+      "timestamp": 1779245361.9995039,
+      "details": {
+        "issue": "client_id parameter values are unsafely concatenated into log messages",
+        "static_evidence": "AbstractTokenService.java:260,267 — LOG.warning(\"No valid client found for clientId: \" + clientId) without sanitization",
+        "code_location": "AbstractTokenService.java:260,267",
+        "cwe": "CWE-117 (Improper Output Neutralization for Logs)",
+        "responses": [
+          {
+            "probe": "newline",
+            "payload": "alice\n[FAKE] Admin login successful",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+          },
+          {
+            "probe": "crlf",
+            "payload": "bob\r\n[FAKE] Security alert bypassed",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+          },
+          {
+            "probe": "unicode_newline",
+            "payload": "eve [FAKE] Token issued for admin",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+          },
+          {
+            "probe": "tab_injection",
+            "payload": "mallory\t[FAKE]\tPrivilege escalation",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+          },
+          {
+            "probe": "null_byte",
+            "payload": "attacker\u0000hidden",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+          },
+          {
+            "probe": "backspace_carriage",
+            "payload": "user\r[FAKE] New log entry",
+            "status": 500,
+            "body_snippet": "<!doctype html><html lang=\"en\"><head><title>HTTP Status 500 – Internal Server Error</title><style type=\"text/css\">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-colo",
+            "reflection": []
+          }
+        ],
+        "note": "Log injection effect cannot be verified externally — confirmed via static code review",
+        "recommendation": "Sanitize clientId before logging; strip newlines and control chars"
+      }
+    },
+    {
+      "test": "CXF_CONCURRENT_REFRESH_TOCTOU",
+      "severity": "MEDIUM",
+      "passed": true,
+      "timestamp": 1779245362.0891297,
+      "details": {
+        "message": "No refresh token issued — cannot test TOCTOU race",
+        "note": "Server does not support refresh token flow in current config"
+      }
+    },
+    {
+      "test": "CXF_INTROSPECTION_EDGE_CASES",
+      "severity": "LOW",
+      "passed": true,
+      "timestamp": 1779245362.173712,
+      "details": {
+        "message": "Introspection endpoint handles edge cases without crashing",
+        "results": [
+          {
+            "probe": "empty_token",
+            "status": 200,
+            "body": "{\"active\":false}"
+          },
+          {
+            "probe": "very_long_token",
+            "status": 200,
+            "body": "{\"active\":false}"
+          },
+          {
+            "probe": "unicode_token",
+            "status": 200,
+            "body": "{\"active\":false}"
+          },
+          {
+            "probe": "json_injection",
+            "status": 200,
+            "body": "{\"active\":false}"
+          },
+          {
+            "probe": "jwt_alg_none",
+            "status": 200,
+            "body": "{\"active\":false}"
+          },
+          {
+            "probe": "double_base64",
+            "status": 200,
+            "body": "{\"active\":false}"
+          }
+        ]
+      }
+    },
+    {
+      "test": "CXF_EXCEPTION_MAPPER_HTTP_200",
+      "severity": "LOW",
+      "passed": true,
+      "timestamp": 1779245362.2643166,
+      "details": {
+        "message": "Exception mapper analysis complete",
+        "static_finding": true,
+        "affected_file": "OAuthServiceExceptionMapper.java:28",
+        "issue": "toResponse() returns Response.ok() (HTTP 200) instead of proper HTTP error status for OAuthServiceException",
+        "violation": "RFC 6749 Section 5.2, RFC 6750 Section 3",
+        "cwe": "CWE-754",
+        "http200_errors_found": [],
+        "remediation": "Return Response.status(400) for client errors, Response.status(401) for authentication errors"
+      }
+    },
+    {
+      "test": "CXF_IP_BINDING_INVERTED",
+      "severity": "MEDIUM",
+      "passed": true,
+      "timestamp": 1779245362.3643968,
+      "details": {
+        "message": "IP binding check inverted - static analysis confirmed",
+        "static_finding": true,
+        "affected_file": "OAuthRequestFilter.java:140-146",
+        "root_cause": "Missing negation operator before accessTokenV.getClientIpAddress().equals(remoteAddress)",
+        "impact": "When IP binding is configured, legitimate users are rejected while attackers from different IPs pass through",
+        "fix": "Change to: if (remoteAddress == null || !accessTokenV.getClientIpAddress().equals(remoteAddress))",
+        "cwe": "CWE-480 (Use of Incorrect Operator)",
+        "cvss": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N (5.3)"
+      }
+    }
+  ]
+}

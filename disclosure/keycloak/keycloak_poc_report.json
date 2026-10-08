@@ -1,0 +1,299 @@
+{
+  "environment": {
+    "image": "quay.io/keycloak/keycloak:26.4.6",
+    "container_name": "keycloak-poc",
+    "base_url": "http://127.0.0.1:8080"
+  },
+  "poc_time": 1764251270,
+  "userinfo_url": "http://127.0.0.1:8080/realms/fuzz/protocol/openid-connect/userinfo",
+  "content_type_tests": [
+    {
+      "content_type": "invalid/@@##",
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "72"
+        },
+        "body": "{\"details\":\"Error id 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-1\",\"stack\":\"\"}"
+      }
+    },
+    {
+      "content_type": "application///json",
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "72"
+        },
+        "body": "{\"details\":\"Error id 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-2\",\"stack\":\"\"}"
+      }
+    },
+    {
+      "content_type": "applicationjson",
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "72"
+        },
+        "body": "{\"details\":\"Error id 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-3\",\"stack\":\"\"}"
+      }
+    },
+    {
+      "content_type": "",
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "72"
+        },
+        "body": "{\"details\":\"Error id 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-4\",\"stack\":\"\"}"
+      }
+    },
+    {
+      "content_type": "application%2Fjson",
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "72"
+        },
+        "body": "{\"details\":\"Error id 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-5\",\"stack\":\"\"}"
+      }
+    },
+    {
+      "content_type": "application%2Fjson%3Bcharset%3Dutf-8",
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "72"
+        },
+        "body": "{\"details\":\"Error id 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-6\",\"stack\":\"\"}"
+      }
+    },
+    {
+      "content_type": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "response": {
+        "status_code": 500,
+        "headers": {
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "72"
+        },
+        "body": "{\"details\":\"Error id 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-7\",\"stack\":\"\"}"
+      }
+    }
+  ],
+  "authorization_tests": [
+    {
+      "authorization": "BEARER eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2R...",
+      "expected_success": true,
+      "response": {
+        "status_code": 403,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\", error=\"insufficient_scope\", error_description=\"Missing openid scope\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "BeArEr eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2R...",
+      "expected_success": true,
+      "response": {
+        "status_code": 403,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\", error=\"insufficient_scope\", error_description=\"Missing openid scope\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "bEaReR eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2R...",
+      "expected_success": true,
+      "response": {
+        "status_code": 403,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\", error=\"insufficient_scope\", error_description=\"Missing openid scope\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "Bearer\teyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2R...",
+      "expected_success": true,
+      "response": {
+        "status_code": 403,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\", error=\"insufficient_scope\", error_description=\"Missing openid scope\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "Bearer\t\t\teyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI...",
+      "expected_success": true,
+      "response": {
+        "status_code": 403,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\", error=\"insufficient_scope\", error_description=\"Missing openid scope\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "Bearer \t \t eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6I...",
+      "expected_success": true,
+      "response": {
+        "status_code": 403,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\", error=\"insufficient_scope\", error_description=\"Missing openid scope\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "Bearer           eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2l...",
+      "expected_success": true,
+      "response": {
+        "status_code": 403,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\", error=\"insufficient_scope\", error_description=\"Missing openid scope\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2R...",
+      "expected_success": true,
+      "response": {
+        "status_code": 403,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\", error=\"insufficient_scope\", error_description=\"Missing openid scope\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "BearereyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2RD...",
+      "expected_success": false,
+      "response": {
+        "status_code": 401,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "XBearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2...",
+      "expected_success": false,
+      "response": {
+        "status_code": 401,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "BearerX eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2...",
+      "expected_success": false,
+      "response": {
+        "status_code": 401,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "Bearer Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIi...",
+      "expected_success": false,
+      "response": {
+        "status_code": 401,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    },
+    {
+      "authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI2R...",
+      "expected_success": false,
+      "response": {
+        "status_code": 401,
+        "headers": {
+          "content-length": "0",
+          "Content-Type": "text/plain;charset=utf-8",
+          "Referrer-Policy": "no-referrer",
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+          "WWW-Authenticate": "Bearer realm=\"fuzz\"",
+          "X-Content-Type-Options": "nosniff"
+        },
+        "body": ""
+      }
+    }
+  ],
+  "container_logs_error_summary": "2025-11-27 13:47:50,365 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,370 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-1: java.lang.IllegalArgumentException: Failed to parse media type invalid/@@##\n2025-11-27 13:47:50,374 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,374 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-2: java.lang.IllegalArgumentException: Failed to parse media type application///json\n2025-11-27 13:47:50,377 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,377 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-3: java.lang.IllegalArgumentException: Failed to parse media type applicationjson\n2025-11-27 13:47:50,380 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,380 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-4: java.lang.IllegalArgumentException: Failed to parse media type \n2025-11-27 13:47:50,383 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,384 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-5: java.lang.IllegalArgumentException: Failed to parse media type application%2Fjson\n2025-11-27 13:47:50,386 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,386 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-6: java.lang.IllegalArgumentException: Failed to parse media type application%2Fjson%3Bcharset%3Dutf-8\n2025-11-27 13:47:50,388 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,389 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-7: java.lang.IllegalArgumentException: Failed to parse media type aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n2025-11-27 13:47:50,392 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,395 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,398 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,400 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,403 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,405 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,408 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,410 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"access_denied\", reason=\"Missing openid scope\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,413 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"invalid_token\", reason=\"Missing token\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,415 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"invalid_token\", reason=\"Missing token\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,417 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"invalid_token\", reason=\"Missing token\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,419 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"invalid_token\", reason=\"Missing token\", auth_method=\"validate_access_token\"\n2025-11-27 13:47:50,421 WARN  [org.keycloak.events] (executor-thread-1) type=\"USER_INFO_REQUEST_ERROR\", realmId=\"e1db061f-8e8a-43eb-8718-3be1e065d71b\", realmName=\"fuzz\", clientId=\"null\", userId=\"null\", ipAddress=\"172.17.0.1\", error=\"invalid_token\", reason=\"Missing token\", auth_method=\"validate_access_token\""
+}

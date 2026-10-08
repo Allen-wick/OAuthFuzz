@@ -1,0 +1,81 @@
+Go Coverage Report - Authelia OAuth Fuzzing
+Generated: 20260401_192131
+======================================================================
+
+Overall Coverage: 97.95%
+Mode: hybrid
+
+=== Code Coverage ===
+Statements: 4784.0/4884.0
+Packages: 0/0
+Methods: 0/0
+
+=== State-based Metrics ===
+Unique states: 120
+Response codes: [200, 302, 303, 400, 401, 403, 429, 431]
+Endpoints hit: 56
+Error patterns: 0
+Total executions: 50924
+
+=== Security Findings ===
+Security-relevant findings: 0
+Crash events: 0
+
+=== Endpoint Coverage ===
+  AuthCodeRedirect: 5439 hits
+  AuthorizeNoPKCE: 4972 hits
+  AuthorizeBadRedirectUri: 4533 hits
+  Login: 4392 hits
+  Introspect: 3266 hits
+  UserInfoWrongToken: 3093 hits
+  TokenBadCode: 2920 hits
+  TokenExchange: 2905 hits
+  AutheliaFirstFactor: 2837 hits
+  Consent: 2382 hits
+  TokenWrongClientSecret: 2250 hits
+  Authorize: 2006 hits
+  PasswordGrant: 1199 hits
+  AutheliaSecondFactor: 877 hits
+  AutheliaConsent: 859 hits
+  UserInfo: 835 hits
+  AuthorizeScopeEscalation: 752 hits
+  RefreshToken: 549 hits
+  RevokeToken: 495 hits
+  UserInfoJWTExpired: 467 hits
+  TokenExchangeParamFlood: 319 hits
+  AuthorizeOpenRedirect: 228 hits
+  AutheliaFirstFactorBypass: 221 hits
+  TokenExchangeNoPKCE: 198 hits
+  TokenExchangeNullContentType: 195 hits
+  AuthorizeHybridIDToken: 191 hits
+  AuthorizeParamFlood100: 191 hits
+  UserInfoJWTWrongSig: 188 hits
+  AutheliaSecondFactorNull: 181 hits
+  AuthorizePKCEMethodConfusion: 163 hits
+  AutheliaLogout: 153 hits
+  AutheliaAuthorize: 147 hits
+  AuthorizeScopeAdmin: 140 hits
+  TokenExchangeWrongClient: 127 hits
+  TokenExchangeXML: 121 hits
+  AutheliaSecondFactorInvalid: 100 hits
+  UserInfoWrongSig: 93 hits
+  UseIDTokenAsAccess: 77 hits
+  AutheliaSessionHijack: 77 hits
+  IntrospectEmptyToken: 76 hits
+  AutheliaDiscovery: 70 hits
+  AuthorizePAR: 67 hits
+  AutheliaJWKS: 67 hits
+  AutheliaLogin: 65 hits
+  PushedAuthorizationRequest: 56 hits
+  UserInfoExpiredToken: 53 hits
+  AuthorizeRedirectSSRF: 51 hits
+  UserInfoJWTAlgNone: 48 hits
+  AutheliaState: 47 hits
+  TokenExchangeInvalidClient: 45 hits
+  TokenExchangeValidClientWrongSecret: 35 hits
+  AutheliaConsentManipulated: 33 hits
+  AuthorizePKCES256: 31 hits
+  AuthorizeHybrid: 21 hits
+  IntrospectMalformed: 20 hits
+  AutheliaStateNull: 1 hits
+

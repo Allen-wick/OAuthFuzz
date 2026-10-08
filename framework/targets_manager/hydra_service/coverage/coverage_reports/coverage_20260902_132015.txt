@@ -1,0 +1,53 @@
+Go Coverage Report - Authelia OAuth Fuzzing
+Generated: 20260902_132015
+======================================================================
+
+Overall Coverage: 95.42%
+Mode: hybrid
+
+=== Code Coverage ===
+Statements: 2085.0/2185.0
+Packages: 0/0
+Methods: 0/0
+
+=== State-based Metrics ===
+Unique states: 35
+Response codes: [200, 302, 303, 400, 401, 404]
+Endpoints hit: 28
+Error patterns: 0
+Total executions: 10002
+
+=== Security Findings ===
+Security-relevant findings: 0
+Crash events: 0
+
+=== Endpoint Coverage ===
+  AuthCodeRedirect: 1398 hits
+  Login: 1350 hits
+  TokenExchange: 1274 hits
+  AuthorizeNoPKCE: 1043 hits
+  HydraClientCreation: 801 hits
+  RevokeToken: 665 hits
+  Introspect: 639 hits
+  HydraAdminAPIProbe: 421 hits
+  Authorize: 386 hits
+  UserInfo: 330 hits
+  HydraParFlood: 310 hits
+  Consent: 271 hits
+  TokenBadCode: 246 hits
+  UserInfoWrongToken: 222 hits
+  AuthorizePKCES256: 187 hits
+  TokenWrongClientSecret: 154 hits
+  AuthorizeBadRedirectUri: 72 hits
+  IntrospectMalformed: 55 hits
+  ClientCredentials: 51 hits
+  TokenExchangeParamFlood: 40 hits
+  IntrospectEmptyToken: 33 hits
+  TokenExchangeWrongClient: 21 hits
+  RefreshToken: 16 hits
+  TokenExchangeNoPKCE: 11 hits
+  AuthorizePKCEMethodConfusion: 3 hits
+  AuthorizeHybrid: 1 hits
+  TokenExchangeXML: 1 hits
+  AuthorizeScopeEscalation: 1 hits
+

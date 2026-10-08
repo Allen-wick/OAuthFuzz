@@ -1,0 +1,36 @@
+{
+  "target_type": "casdoor",
+  "oauth": {
+    "base_url": "http://127.0.0.1:8000",
+    "realm": "",
+    "client_id": "fuzz-client",
+    "client_secret": "fuzz-client-secret",
+    "redirect_uri": "http://127.0.0.1:7777/callback",
+    "user": "alice",
+    "password": "alice",
+    "scope": "openid profile email"
+  },
+  "casdoor": {
+    "container_name": "casdoor-fuzz",
+    "image": "casbin/casdoor:latest",
+    "http_port": 8000,
+    "config_dir": "./targets_manager/casdoor_service/config",
+    "work_dir": "./targets_manager/casdoor_service/work",
+    "health_check_url": "http://127.0.0.1:8000/api/health",
+    "coverage_enabled": true,
+    "coverage_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/extra/oauthfuzz_casdoor_s1/cov",
+    "environment": {}
+  },
+  "fuzzing": {
+    "iterations": 200,
+    "baseline_refresh_every": 25,
+    "coverage_cache_ttl": 15.0,
+    "differential_coverage": false,
+    "save_interesting_cases": true,
+    "canonicalize_sequences": true,
+    "seed": 1,
+    "budget_protocol_steps": 0,
+    "dump_every_n": 200
+  },
+  "output_dir": "/home/lab124/OAUTH_FUZZ/paper_writing/CS_OAuthFuzz/experiments/results/extra/oauthfuzz_casdoor_s1"
+}

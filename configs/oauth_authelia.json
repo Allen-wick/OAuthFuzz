@@ -1,0 +1,53 @@
+{
+    "name": "oauth-authelia-coverage-fuzzer",
+    "target_type": "authelia",
+    "protocol": "OAUTH",
+    "implementation": "Authelia",
+    "output_dir": "out/oauth_authelia_coverage",
+    "exec_tmout": "15000+",
+    "oauth": {
+        "base_url": "https://127.0.0.1:9091",
+        "realm": "",
+        "client_id": "fuzz-client",
+        "client_secret": "fuzz-client-secret",
+        "redirect_uri": "https://127.0.0.1:7777/callback",
+        "user": "testuser",
+        "password": "testpass",
+        "scope": "openid profile email",
+        "verify_ssl": false
+    },
+    "authelia": {
+        "container_name": "authelia-fuzz-coverage",
+        "image": "authelia/authelia:latest",
+        "config_dir": "./targets_manager/authelia_service/config",
+        "work_dir": "./targets_manager/authelia_service/work",
+        "http_port": 9091,
+        "metrics_port": 9959,
+        "log_level": "debug",
+        "require_pkce": false,
+        "enable_2fa_testing": false,
+        "coverage_enabled": true,
+        "coverage_mode": "hybrid",
+        "coverage_dir": "./targets_manager/authelia_service/coverage",
+        "health_check_url": "https://127.0.0.1:9091/api/health",
+        "startup_timeout": 120,
+        "environment": {}
+    },
+    "fuzzing": {
+        "max_iterations": 5000,
+        "timeout_seconds": 14400,
+        "mode": "aflnet",
+        "adapter": "authelia",
+        "mutation_strategies": [
+            "param_corruption",
+            "header_injection",
+            "url_manipulation",
+            "method_mutation",
+            "authelia_2fa_bypass",
+            "authelia_consent_bypass"
+        ],
+        "coverage_threshold": 0.0,
+        "canonicalize_sequences": true,
+        "dump_every_n": 20
+    }
+}

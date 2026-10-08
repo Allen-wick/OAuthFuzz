@@ -1,0 +1,41 @@
+{
+    "target_type": "logto",
+    "name": "oauth-logto-fuzzer",
+    "protocol": "OAUTH",
+    "implementation": "Logto OIDC Provider (Node.js/TypeScript)",
+    "output_dir": "out/oauth_logto_coverage",
+    "exec_tmout": 5000,
+    "oauth": {
+        "base_url": "http://127.0.0.1:3001",
+        "realm": "",
+        "client_id": "fuzz-client",
+        "client_secret": "fuzz-client-secret-xK9mP2nQ",
+        "redirect_uri": "http://127.0.0.1:7777/callback",
+        "user": "fuzzuser@example.com",
+        "password": "FuzzPass2025!",
+        "scope": "openid profile email offline_access",
+        "verify_ssl": false
+    },
+    "logto": {
+        "container_name": "logto-fuzz",
+        "image": "svhd/logto:latest",
+        "http_port": 3001,
+        "admin_port": 3002,
+        "pg_port": 54322,
+        "config_dir": "./targets_manager/logto_service/config",
+        "work_dir": "./targets_manager/logto_service/work",
+        "health_check_url": "http://127.0.0.1:3001/oidc/.well-known/openid-configuration",
+        "startup_timeout": 180,
+        "admin_email": "admin@fuzz.local",
+        "admin_password": "AdminPass2025!"
+    },
+    "fuzzing": {
+        "max_iterations": 500,
+        "timeout_seconds": 3600,
+        "mutation_strategies": ["insert", "delete", "replace", "swap", "duplicate"],
+        "coverage_threshold": 0.05,
+        "canonicalize_sequences": true,
+        "differential_coverage": true,
+        "save_interesting_cases": true
+    }
+}

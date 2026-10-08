@@ -1,0 +1,72 @@
+{
+ "authorize": {
+  "method": "GET",
+  "path_vars": {
+   "response_type": "code",
+   "client_id": "fuzz-client",
+   "redirect_uri": "http://127.0.0.1:7777/callback",
+   "scope": "openid profile email",
+   "state": "GQD-zMBX9uNTQCr6lEvU3bGJITLXr73-F4sKbpbCjrs",
+   "nonce": "zeJhd1qc0YmdMVZK-o1gibqdaNMgKRyy9a8rmul2uTg"
+  }
+ },
+ "token": {
+  "method": "POST",
+  "form": {
+   "grant_type": "authorization_code",
+   "code": "CODE",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret",
+   "redirect_uri": "http://127.0.0.1:7777/callback",
+   "code_verifier": "Qbi4hgjflwLFkziNgE0v-FgRh0phfQ46vUZDBFcW74w"
+  }
+ },
+ "userinfo": {
+  "method": "GET",
+  "headers": {
+   "Authorization": "Bearer TOKEN"
+  }
+ },
+ "introspect": {
+  "method": "POST",
+  "form": {
+   "token": "TOKEN",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "refresh": {
+  "method": "POST",
+  "form": {
+   "grant_type": "refresh_token",
+   "refresh_token": "REFRESH",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "revoke": {
+  "method": "POST",
+  "form": {
+   "token": "TOKEN",
+   "client_id": "fuzz-client",
+   "client_secret": "fuzz-client-secret"
+  }
+ },
+ "endpoints": {
+  "authorize": "http://127.0.0.1:8080/realms/fuzz/protocol/openid-connect/auth",
+  "token": "http://127.0.0.1:8080/realms/fuzz/protocol/openid-connect/token",
+  "userinfo": "http://127.0.0.1:8080/realms/fuzz/protocol/openid-connect/userinfo",
+  "introspect": "http://127.0.0.1:8080/realms/fuzz/protocol/openid-connect/token/introspect",
+  "revoke": "http://127.0.0.1:8080/realms/fuzz/protocol/openid-connect/revoke"
+ },
+ "flow_results": {
+  "Authorize": "BadRequest",
+  "Login": "BadRequest",
+  "AuthCodeRedirect": "BadRequest",
+  "TokenExchange": "BadRequest",
+  "UserInfo": "BadRequest",
+  "Introspect": "BadRequest",
+  "RefreshToken": "BadRequest",
+  "RevokeToken": "BadRequest"
+ }
+}

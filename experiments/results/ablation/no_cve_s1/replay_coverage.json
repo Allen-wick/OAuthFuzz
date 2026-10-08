@@ -1,0 +1,7 @@
+{
+  "arm_dir": "no_cve_s1",
+  "n_cases": 90,
+  "n_ok": 90,
+  "branch_pct": 9.525760058255962,
+  "instr_pct": 16.7178212555749
+}

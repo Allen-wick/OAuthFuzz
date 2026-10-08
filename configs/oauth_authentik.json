@@ -1,0 +1,42 @@
+{
+    "target_type": "authentik",
+    "oauth": {
+        "base_url": "http://127.0.0.1:9000",
+        "realm": "",
+        "client_id": "fuzz-client",
+        "client_secret": "fuzz-client-secret-xK9mP2nQ",
+        "redirect_uri": "http://127.0.0.1:7777/callback",
+        "user": "testuser",
+        "password": "Testpass123!",
+        "scope": "openid profile email offline_access"
+    },
+    "authentik": {
+        "container_name": "authentik-fuzz",
+        "image": "ghcr.io/goauthentik/server:2026.5.2",
+        "http_port": 9000,
+        "https_port": 9443,
+        "config_dir": "./targets_manager/authentik_service/config",
+        "work_dir": "./targets_manager/authentik_service/work",
+        "health_check_url": "http://127.0.0.1:9000/-/health/live/",
+        "coverage_enabled": false,
+        "coverage_dir": "./authentik_coverage",
+        "environment": {
+            "AUTHENTIK_LOG_LEVEL": "info"
+        },
+        "bootstrap_password": "akadmin-FuzzPass2025!",
+        "bootstrap_token": "fuzz-bootstrap-api-token-2025",
+        "bootstrap_email": "admin@fuzz.local",
+        "pg_port": 54320,
+        "redis_port": 63790,
+        "app_slug": "fuzz-app",
+        "startup_timeout": 180
+    },
+    "fuzzing": {
+        "iterations": 200,
+        "baseline_refresh_every": 25,
+        "coverage_cache_ttl": 15.0,
+        "differential_coverage": false,
+        "save_interesting_cases": true,
+        "canonicalize_sequences": true
+    }
+}

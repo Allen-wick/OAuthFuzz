@@ -1,0 +1,4 @@
+GET /services/oauth2/authorize?response_type=code&client_id=fuzz-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A7777%2Fcallback&scope=openid%20read_resource HTTP/1.1
+Host: 127.0.0.1:26000
+Connection: close
+

@@ -1,0 +1,25 @@
+{
+  "config": "/home/lab124/OAUTH_FUZZ/configs/oauth_keycloak.json",
+  "timestamp": 1790684190.0335732,
+  "session_reset_only": {
+    "n": 1000,
+    "total_s": 0.053,
+    "per_reset_ms": 0.053
+  },
+  "end_to_end_light": {
+    "n": 200,
+    "mean_seq_s": 0.0142,
+    "median_seq_s": 0.0135,
+    "est_1000_seq_min": 0.24
+  },
+  "container_restart": {
+    "n_cycles": 3,
+    "cycle_seconds": [
+      1.5,
+      242.5,
+      242.4
+    ],
+    "mean_cycle_min": 2.7,
+    "est_1000_seq_min": 2702.2
+  }
+}

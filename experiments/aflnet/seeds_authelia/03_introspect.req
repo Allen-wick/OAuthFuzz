@@ -1,0 +1,7 @@
+POST /api/oidc/introspection HTTP/1.1
+Host: 127.0.0.1:26000
+Content-Type: application/x-www-form-urlencoded
+Connection: close
+Content-Length: 45
+
+token=abc123&client_id=fuzz-client&client_secret=fuzz-client-secret

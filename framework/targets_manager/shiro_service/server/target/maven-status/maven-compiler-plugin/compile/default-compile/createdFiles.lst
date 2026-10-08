@@ -1,0 +1,15 @@
+com/fuzz/shiro/ShiroOAuthServer.class
+com/fuzz/shiro/ShiroOAuthServer$OAuthSessionFilter.class
+com/fuzz/shiro/oauth/TokenEndpoint.class
+com/fuzz/shiro/oauth/DiscoveryEndpoint.class
+com/fuzz/shiro/oauth/AuthorizationEndpoint.class
+com/fuzz/shiro/security/ShiroSecurityManager.class
+com/fuzz/shiro/model/ClientDetails.class
+com/fuzz/shiro/oauth/RevokeEndpoint.class
+com/fuzz/shiro/security/OAuthRealm.class
+com/fuzz/shiro/oauth/UserInfoEndpoint.class
+com/fuzz/shiro/model/AccessToken.class
+com/fuzz/shiro/model/AuthorizationCode.class
+com/fuzz/shiro/ShiroOAuthServer$HealthServlet.class
+com/fuzz/shiro/oauth/LoginServlet.class
+com/fuzz/shiro/oauth/IntrospectEndpoint.class

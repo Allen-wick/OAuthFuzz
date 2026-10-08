@@ -1,0 +1,11 @@
+[Shiro] SecurityManager initialized
+[main] INFO org.eclipse.jetty.util.log - Logging initialized @150ms to org.eclipse.jetty.util.log.Slf4jLog
+[Shiro OAuth2 Server] Starting on port 8085
+[main] INFO org.eclipse.jetty.server.Server - jetty-9.4.54.v20240208; built: 2024-02-08T19:42:39.027Z; git: cef3fbd6d736a21e7d541a5db490381d95a2047d; jvm 17.0.15+6-Ubuntu-0ubuntu120.04
+[main] INFO org.eclipse.jetty.server.session - DefaultSessionIdManager workerName=node0
+[main] INFO org.eclipse.jetty.server.session - No SessionScavenger set, using defaults
+[main] INFO org.eclipse.jetty.server.session - node0 Scavenging every 600000ms
+[main] INFO org.eclipse.jetty.server.handler.ContextHandler - Started o.e.j.s.ServletContextHandler@448ff1a8{/,null,AVAILABLE}
+[main] INFO org.eclipse.jetty.server.AbstractConnector - Started ServerConnector@551aa95a{HTTP/1.1, (http/1.1)}{0.0.0.0:8085}
+[main] INFO org.eclipse.jetty.server.Server - Started @278ms
+[Shiro OAuth2 Server] Running on http://0.0.0.0:8085

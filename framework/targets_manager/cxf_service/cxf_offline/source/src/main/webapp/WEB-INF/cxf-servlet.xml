@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://cxf.apache.org/jaxrs
+           http://cxf.apache.org/schemas/jaxrs.xsd">
+
+    <bean id="oauthProvider" class="fuzz.cxf.InMemoryOAuthDataProvider"/>
+
+    <!--
+        Use the auto-approving subclass so the authorize() call returns a
+        303 to redirect_uri?code=... directly.  Keeping the stock
+        AuthorizationCodeGrantService here caused HTTP 500 on GET /authorize
+        because CXF could not serialize OAuthAuthorizationData to text/html
+        / xhtml+xml (no MessageBodyWriter registered in this minimal WAR).
+    -->
+    <bean id="authService" class="fuzz.cxf.AutoApproveAuthorizationCodeService">
+        <property name="dataProvider" ref="oauthProvider"/>
+        <property name="canSupportPublicClients" value="true"/>
+    </bean>
+
+    <!--
+        IMPORTANT: every grant handler MUST have its dataProvider injected
+        explicitly when it is provided through <property name="grantHandlers">.
+        AccessTokenService.setGrantHandlers(List) only assigns the list — it
+        does NOT call handler.setDataProvider().  If the handler's dataProvider
+        is null, AuthorizationCodeGrantHandler.createAccessToken() throws an
+        NPE on ((AuthorizationCodeDataProvider) getDataProvider()).removeCodeGrant(),
+        which AccessTokenService catches and reports as
+        HTTP 400 {"error":"invalid_grant"} (with the NPE only logged at FINE).
+    -->
+    <bean id="authCodeGrantHandler"
+          class="org.apache.cxf.rs.security.oauth2.grants.code.AuthorizationCodeGrantHandler">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+    <bean id="refreshTokenGrantHandler"
+          class="org.apache.cxf.rs.security.oauth2.grants.refresh.RefreshTokenGrantHandler">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+    <bean id="clientCredentialsGrantHandler"
+          class="org.apache.cxf.rs.security.oauth2.grants.clientcred.ClientCredentialsGrantHandler">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <!--
+        RFC 6749 §4.3 Resource Owner Password Credentials grant.
+        Declared as a primary grant type by CXF 3.5.7's cxf-rt-rs-security-oauth2.
+        A ResourceOwnerLoginHandler is required — CXF does NOT supply a default.
+        MockResourceOwnerLoginHandler accepts any non-empty credential pair so
+        the fuzzer can exercise token issuance, scope validation, refresh and
+        introspection paths without an external user store.
+    -->
+    <bean id="resourceOwnerLoginHandler" class="fuzz.cxf.MockResourceOwnerLoginHandler"/>
+    <bean id="resourceOwnerGrantHandler"
+          class="org.apache.cxf.rs.security.oauth2.grants.owner.ResourceOwnerGrantHandler">
+        <property name="dataProvider" ref="oauthProvider"/>
+        <property name="loginHandler" ref="resourceOwnerLoginHandler"/>
+    </bean>
+
+    <!--
+        RFC 7523 urn:ietf:params:oauth:grant-type:jwt-bearer grant.
+        For fuzzing we deliberately do NOT wire a JwsSignatureVerifier so that
+        the handler takes the "validation failure" path for every request —
+        that is exactly the code region (assertion parsing, claim validation,
+        audience check, issuer lookup) where we want fuzz signal. If you later
+        want successful JWT-bearer flows, inject
+        `jwsVerifier`/`validateCertificateChain`/`audiences` here.
+    -->
+    <bean id="jwtBearerGrantHandler"
+          class="org.apache.cxf.rs.security.oauth2.grants.jwt.JwtBearerGrantHandler">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <bean id="tokenService" class="org.apache.cxf.rs.security.oauth2.services.AccessTokenService">
+        <property name="dataProvider" ref="oauthProvider"/>
+        <property name="canSupportPublicClients" value="true"/>
+        <property name="grantHandlers">
+            <list>
+                <ref bean="authCodeGrantHandler"/>
+                <ref bean="refreshTokenGrantHandler"/>
+                <ref bean="clientCredentialsGrantHandler"/>
+                <ref bean="resourceOwnerGrantHandler"/>
+                <ref bean="jwtBearerGrantHandler"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="introspectService"
+          class="org.apache.cxf.rs.security.oauth2.services.TokenIntrospectionService">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+    <bean id="revokeService"
+          class="org.apache.cxf.rs.security.oauth2.services.TokenRevocationService">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <jaxrs:server id="oauth2" address="/oauth2">
+        <jaxrs:serviceBeans>
+            <ref bean="authService"/>
+            <ref bean="tokenService"/>
+            <ref bean="introspectService"/>
+            <ref bean="revokeService"/>
+        </jaxrs:serviceBeans>
+        <!--
+            OAuthJSONProvider is the ONLY MessageBodyWriter that knows how
+            to serialize ClientAccessToken / OAuthError / TokenIntrospection
+            to application/json.  CXF does not auto-register it via
+            <jaxrs:server> in Spring XML — it must be listed here, otherwise
+            AccessTokenService.handleTokenRequest() returns HTTP 500 with
+            "No message body writer has been found for class
+            org.apache.cxf.rs.security.oauth2.common.ClientAccessToken".
+        -->
+        <jaxrs:providers>
+            <bean class="org.apache.cxf.rs.security.oauth2.provider.OAuthJSONProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+</beans>

@@ -1,0 +1,60 @@
+Go Coverage Report - Authelia OAuth Fuzzing
+Generated: 20260902_111432
+======================================================================
+
+Overall Coverage: 96.66%
+Mode: hybrid
+
+=== Code Coverage ===
+Statements: 2896.0/2996.0
+Packages: 0/0
+Methods: 0/0
+
+=== State-based Metrics ===
+Unique states: 44
+Response codes: [200, 302, 303, 400, 401, 404]
+Endpoints hit: 35
+Error patterns: 0
+Total executions: 10002
+
+=== Security Findings ===
+Security-relevant findings: 0
+Crash events: 0
+
+=== Endpoint Coverage ===
+  Login: 1573 hits
+  AuthCodeRedirect: 1549 hits
+  TokenExchange: 1251 hits
+  Authorize: 959 hits
+  AuthorizeNoPKCE: 685 hits
+  Introspect: 408 hits
+  RefreshToken: 383 hits
+  ClientCredentials: 315 hits
+  RevokeToken: 307 hits
+  HydraAdminAPIProbe: 296 hits
+  HydraClientCreation: 273 hits
+  UserInfo: 152 hits
+  AuthorizeBadRedirectUri: 149 hits
+  HydraParFlood: 137 hits
+  Consent: 122 hits
+  AuthorizeImplicit: 88 hits
+  IntrospectMalformed: 87 hits
+  IntrospectEmptyToken: 84 hits
+  AuthorizeOpenRedirect: 82 hits
+  AuthorizeRedirectSSRF: 81 hits
+  AuthorizePAR: 81 hits
+  TokenExchangeWrongClient: 80 hits
+  AuthorizePKCEMethodConfusion: 79 hits
+  UseIDTokenAsAccess: 79 hits
+  TokenExchangeNoPKCE: 78 hits
+  TokenExchangeXML: 78 hits
+  AuthorizePKCES256: 77 hits
+  AuthorizeScopeEscalation: 76 hits
+  AuthorizeScopeAdmin: 76 hits
+  AuthorizeHybrid: 76 hits
+  PushedAuthorizationRequest: 74 hits
+  TokenWrongClientSecret: 68 hits
+  UserInfoWrongToken: 49 hits
+  TokenBadCode: 46 hits
+  TokenExchangeParamFlood: 4 hits
+

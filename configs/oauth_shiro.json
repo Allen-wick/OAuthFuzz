@@ -1,0 +1,48 @@
+{
+  "name": "oauth-shiro-fuzzer",
+  "target_type": "shiro",
+  "protocol": "OAUTH",
+  "implementation": "Apache Shiro 2.2.0 OAuth2 Server",
+  "output_dir": "out/oauth_shiro_coverage",
+  "oauth": {
+    "base_url": "http://127.0.0.1:8085",
+    "realm": "",
+    "client_id": "test-client",
+    "client_secret": "test-secret",
+    "redirect_uri": "http://127.0.0.1:8085/callback",
+    "user": "user1",
+    "password": "pass1",
+    "scope": "openid profile email"
+  },
+  "shiro": {
+    "container_name": "shiro-oauth-fuzz",
+    "image": "oauth2-shiro:latest",
+    "http_port": 8085,
+    "config_dir": "./targets_manager/shiro_service/config",
+    "work_dir": "./targets_manager/shiro_service/work",
+    "startup_timeout": 180,
+    "jacoco_enabled": true
+  },
+  "jacoco": {
+    "version": "0.8.14",
+    "work_dir": "jacoco_tools",
+    "agent_port": 6301,
+    "dump_every_n": 10,
+    "includes": [
+      "com.fuzz.shiro.*"
+    ],
+    "excludes": [
+      "com.fuzz.shiro.*.*Test*"
+    ]
+  },
+  "fuzzing": {
+    "max_iterations": 500,
+    "timeout_seconds": 3600,
+    "differential_coverage": true,
+    "baseline_refresh_every": 50,
+    "coverage_cache_ttl": 10,
+    "canonicalize_sequences": true,
+    "save_interesting_cases": true,
+    "monotonic_baseline": true
+  }
+}

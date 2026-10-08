@@ -1,0 +1,189 @@
+Updating the configuration and installing your custom providers, if any. Please wait.
+2025-11-27 13:47:29,038 INFO  [io.quarkus.deployment.QuarkusAugmentor] (main) Quarkus augmentation completed in 4948ms
+Running the server in development mode. DO NOT use this configuration in production.
+2025-11-27 13:47:31,550 INFO  [org.hibernate.orm.jdbc.batch] (JPA Startup Thread) HHH100501: Automatic JDBC statement batching enabled (maximum batch size 32)
+2025-11-27 13:47:32,167 INFO  [org.keycloak.quarkus.runtime.storage.database.liquibase.QuarkusJpaUpdaterProvider] (main) Initializing database schema. Using changelog META-INF/jpa-changelog-master.xml
+2025-11-27 13:47:46,650 INFO  [org.infinispan.CONTAINER] (main) Virtual threads support enabled
+2025-11-27 13:47:46,767 INFO  [org.infinispan.CONTAINER] (main) ISPN000556: Starting user marshaller 'org.infinispan.commons.marshall.ImmutableProtoStreamMarshaller'
+2025-11-27 13:47:47,084 INFO  [org.keycloak.connections.infinispan.DefaultInfinispanConnectionProviderFactory] (main) Node name: node_792975, Site name: null
+2025-11-27 13:47:47,238 INFO  [org.keycloak.services] (main) KC-SERVICES0050: Initializing master realm
+2025-11-27 13:47:47,995 WARN  [org.keycloak.services] (main) KC-SERVICES0110: Environment variable 'KEYCLOAK_ADMIN' is deprecated, use 'KC_BOOTSTRAP_ADMIN_USERNAME' instead
+2025-11-27 13:47:47,995 WARN  [org.keycloak.services] (main) KC-SERVICES0110: Environment variable 'KEYCLOAK_ADMIN_PASSWORD' is deprecated, use 'KC_BOOTSTRAP_ADMIN_PASSWORD' instead
+2025-11-27 13:47:48,137 INFO  [org.keycloak.services] (main) KC-SERVICES0077: Created temporary admin user with username admin
+2025-11-27 13:47:48,233 INFO  [io.quarkus] (main) Keycloak 26.4.6 on JVM (powered by Quarkus 3.27.0) started in 19.107s. Listening on: http://0.0.0.0:8080
+2025-11-27 13:47:48,233 INFO  [io.quarkus] (main) Profile dev activated. 
+2025-11-27 13:47:48,233 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, jdbc-h2, keycloak, narayana-jta, opentelemetry, reactive-routes, rest, rest-jackson, smallrye-context-propagation, vertx]
+2025-11-27 13:47:50,365 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,370 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-1: java.lang.IllegalArgumentException: Failed to parse media type invalid/@@##
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.internalParse(MediaTypeHeaderDelegate.java:95)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.parse(MediaTypeHeaderDelegate.java:53)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.fromString(MediaTypeHeaderDelegate.java:128)
+	at org.jboss.resteasy.reactive.common.util.MediaTypeHelper.valueOf(MediaTypeHelper.java:27)
+	at org.jboss.resteasy.reactive.server.jaxrs.HttpHeadersImpl.getMediaType(HttpHeadersImpl.java:89)
+	at org.jboss.resteasy.reactive.server.jaxrs.ContainerRequestContextImpl.getMediaType(ContainerRequestContextImpl.java:125)
+	at org.keycloak.headers.DefaultSecurityHeadersProvider.addHeaders(DefaultSecurityHeadersProvider.java:71)
+	at org.keycloak.services.filters.KeycloakSecurityHeadersFilter.filter(KeycloakSecurityHeadersFilter.java:45)
+	at org.jboss.resteasy.reactive.server.handlers.ResourceResponseFilterHandler.handle(ResourceResponseFilterHandler.java:25)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:192)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:147)
+	at io.quarkus.vertx.core.runtime.VertxCoreRecorder$15.runWith(VertxCoreRecorder.java:645)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.doRunWith(EnhancedQueueExecutor.java:2651)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2630)
+	at org.jboss.threads.EnhancedQueueExecutor.runThreadBody(EnhancedQueueExecutor.java:1622)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1589)
+	at org.jboss.threads.DelegatingRunnable.run(DelegatingRunnable.java:11)
+	at org.jboss.threads.ThreadLocalResettingRunnable.run(ThreadLocalResettingRunnable.java:11)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+2025-11-27 13:47:50,374 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,374 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-2: java.lang.IllegalArgumentException: Failed to parse media type application///json
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.internalParse(MediaTypeHeaderDelegate.java:95)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.parse(MediaTypeHeaderDelegate.java:53)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.fromString(MediaTypeHeaderDelegate.java:128)
+	at org.jboss.resteasy.reactive.common.util.MediaTypeHelper.valueOf(MediaTypeHelper.java:27)
+	at org.jboss.resteasy.reactive.server.jaxrs.HttpHeadersImpl.getMediaType(HttpHeadersImpl.java:89)
+	at org.jboss.resteasy.reactive.server.jaxrs.ContainerRequestContextImpl.getMediaType(ContainerRequestContextImpl.java:125)
+	at org.keycloak.headers.DefaultSecurityHeadersProvider.addHeaders(DefaultSecurityHeadersProvider.java:71)
+	at org.keycloak.services.filters.KeycloakSecurityHeadersFilter.filter(KeycloakSecurityHeadersFilter.java:45)
+	at org.jboss.resteasy.reactive.server.handlers.ResourceResponseFilterHandler.handle(ResourceResponseFilterHandler.java:25)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:192)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:147)
+	at io.quarkus.vertx.core.runtime.VertxCoreRecorder$15.runWith(VertxCoreRecorder.java:645)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.doRunWith(EnhancedQueueExecutor.java:2651)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2630)
+	at org.jboss.threads.EnhancedQueueExecutor.runThreadBody(EnhancedQueueExecutor.java:1622)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1589)
+	at org.jboss.threads.DelegatingRunnable.run(DelegatingRunnable.java:11)
+	at org.jboss.threads.ThreadLocalResettingRunnable.run(ThreadLocalResettingRunnable.java:11)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+2025-11-27 13:47:50,377 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,377 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-3: java.lang.IllegalArgumentException: Failed to parse media type applicationjson
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.internalParse(MediaTypeHeaderDelegate.java:77)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.parse(MediaTypeHeaderDelegate.java:53)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.fromString(MediaTypeHeaderDelegate.java:128)
+	at org.jboss.resteasy.reactive.common.util.MediaTypeHelper.valueOf(MediaTypeHelper.java:27)
+	at org.jboss.resteasy.reactive.server.jaxrs.HttpHeadersImpl.getMediaType(HttpHeadersImpl.java:89)
+	at org.jboss.resteasy.reactive.server.jaxrs.ContainerRequestContextImpl.getMediaType(ContainerRequestContextImpl.java:125)
+	at org.keycloak.headers.DefaultSecurityHeadersProvider.addHeaders(DefaultSecurityHeadersProvider.java:71)
+	at org.keycloak.services.filters.KeycloakSecurityHeadersFilter.filter(KeycloakSecurityHeadersFilter.java:45)
+	at org.jboss.resteasy.reactive.server.handlers.ResourceResponseFilterHandler.handle(ResourceResponseFilterHandler.java:25)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:192)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:147)
+	at io.quarkus.vertx.core.runtime.VertxCoreRecorder$15.runWith(VertxCoreRecorder.java:645)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.doRunWith(EnhancedQueueExecutor.java:2651)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2630)
+	at org.jboss.threads.EnhancedQueueExecutor.runThreadBody(EnhancedQueueExecutor.java:1622)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1589)
+	at org.jboss.threads.DelegatingRunnable.run(DelegatingRunnable.java:11)
+	at org.jboss.threads.ThreadLocalResettingRunnable.run(ThreadLocalResettingRunnable.java:11)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+2025-11-27 13:47:50,380 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,380 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-4: java.lang.IllegalArgumentException: Failed to parse media type 
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.internalParse(MediaTypeHeaderDelegate.java:77)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.parse(MediaTypeHeaderDelegate.java:53)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.fromString(MediaTypeHeaderDelegate.java:128)
+	at org.jboss.resteasy.reactive.common.util.MediaTypeHelper.valueOf(MediaTypeHelper.java:27)
+	at org.jboss.resteasy.reactive.server.jaxrs.HttpHeadersImpl.getMediaType(HttpHeadersImpl.java:89)
+	at org.jboss.resteasy.reactive.server.jaxrs.ContainerRequestContextImpl.getMediaType(ContainerRequestContextImpl.java:125)
+	at org.keycloak.headers.DefaultSecurityHeadersProvider.addHeaders(DefaultSecurityHeadersProvider.java:71)
+	at org.keycloak.services.filters.KeycloakSecurityHeadersFilter.filter(KeycloakSecurityHeadersFilter.java:45)
+	at org.jboss.resteasy.reactive.server.handlers.ResourceResponseFilterHandler.handle(ResourceResponseFilterHandler.java:25)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:192)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:147)
+	at io.quarkus.vertx.core.runtime.VertxCoreRecorder$15.runWith(VertxCoreRecorder.java:645)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.doRunWith(EnhancedQueueExecutor.java:2651)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2630)
+	at org.jboss.threads.EnhancedQueueExecutor.runThreadBody(EnhancedQueueExecutor.java:1622)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1589)
+	at org.jboss.threads.DelegatingRunnable.run(DelegatingRunnable.java:11)
+	at org.jboss.threads.ThreadLocalResettingRunnable.run(ThreadLocalResettingRunnable.java:11)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+2025-11-27 13:47:50,383 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,384 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-5: java.lang.IllegalArgumentException: Failed to parse media type application%2Fjson
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.internalParse(MediaTypeHeaderDelegate.java:77)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.parse(MediaTypeHeaderDelegate.java:53)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.fromString(MediaTypeHeaderDelegate.java:128)
+	at org.jboss.resteasy.reactive.common.util.MediaTypeHelper.valueOf(MediaTypeHelper.java:27)
+	at org.jboss.resteasy.reactive.server.jaxrs.HttpHeadersImpl.getMediaType(HttpHeadersImpl.java:89)
+	at org.jboss.resteasy.reactive.server.jaxrs.ContainerRequestContextImpl.getMediaType(ContainerRequestContextImpl.java:125)
+	at org.keycloak.headers.DefaultSecurityHeadersProvider.addHeaders(DefaultSecurityHeadersProvider.java:71)
+	at org.keycloak.services.filters.KeycloakSecurityHeadersFilter.filter(KeycloakSecurityHeadersFilter.java:45)
+	at org.jboss.resteasy.reactive.server.handlers.ResourceResponseFilterHandler.handle(ResourceResponseFilterHandler.java:25)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:192)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:147)
+	at io.quarkus.vertx.core.runtime.VertxCoreRecorder$15.runWith(VertxCoreRecorder.java:645)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.doRunWith(EnhancedQueueExecutor.java:2651)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2630)
+	at org.jboss.threads.EnhancedQueueExecutor.runThreadBody(EnhancedQueueExecutor.java:1622)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1589)
+	at org.jboss.threads.DelegatingRunnable.run(DelegatingRunnable.java:11)
+	at org.jboss.threads.ThreadLocalResettingRunnable.run(ThreadLocalResettingRunnable.java:11)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+2025-11-27 13:47:50,386 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,386 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-6: java.lang.IllegalArgumentException: Failed to parse media type application%2Fjson%3Bcharset%3Dutf-8
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.internalParse(MediaTypeHeaderDelegate.java:77)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.parse(MediaTypeHeaderDelegate.java:53)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.fromString(MediaTypeHeaderDelegate.java:128)
+	at org.jboss.resteasy.reactive.common.util.MediaTypeHelper.valueOf(MediaTypeHelper.java:27)
+	at org.jboss.resteasy.reactive.server.jaxrs.HttpHeadersImpl.getMediaType(HttpHeadersImpl.java:89)
+	at org.jboss.resteasy.reactive.server.jaxrs.ContainerRequestContextImpl.getMediaType(ContainerRequestContextImpl.java:125)
+	at org.keycloak.headers.DefaultSecurityHeadersProvider.addHeaders(DefaultSecurityHeadersProvider.java:71)
+	at org.keycloak.services.filters.KeycloakSecurityHeadersFilter.filter(KeycloakSecurityHeadersFilter.java:45)
+	at org.jboss.resteasy.reactive.server.handlers.ResourceResponseFilterHandler.handle(ResourceResponseFilterHandler.java:25)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:192)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:147)
+	at io.quarkus.vertx.core.runtime.VertxCoreRecorder$15.runWith(VertxCoreRecorder.java:645)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.doRunWith(EnhancedQueueExecutor.java:2651)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2630)
+	at org.jboss.threads.EnhancedQueueExecutor.runThreadBody(EnhancedQueueExecutor.java:1622)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1589)
+	at org.jboss.threads.DelegatingRunnable.run(DelegatingRunnable.java:11)
+	at org.jboss.threads.ThreadLocalResettingRunnable.run(ThreadLocalResettingRunnable.java:11)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+2025-11-27 13:47:50,388 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,389 ERROR [io.quarkus.vertx.http.runtime.QuarkusErrorHandler] (executor-thread-1) HTTP Request to /realms/fuzz/protocol/openid-connect/userinfo failed, error id: 63f30dc0-7e9c-46e3-bcf2-58ec84c0f1ff-7: java.lang.IllegalArgumentException: Failed to parse media type aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.internalParse(MediaTypeHeaderDelegate.java:77)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.parse(MediaTypeHeaderDelegate.java:53)
+	at org.jboss.resteasy.reactive.common.headers.MediaTypeHeaderDelegate.fromString(MediaTypeHeaderDelegate.java:128)
+	at org.jboss.resteasy.reactive.common.util.MediaTypeHelper.valueOf(MediaTypeHelper.java:27)
+	at org.jboss.resteasy.reactive.server.jaxrs.HttpHeadersImpl.getMediaType(HttpHeadersImpl.java:89)
+	at org.jboss.resteasy.reactive.server.jaxrs.ContainerRequestContextImpl.getMediaType(ContainerRequestContextImpl.java:125)
+	at org.keycloak.headers.DefaultSecurityHeadersProvider.addHeaders(DefaultSecurityHeadersProvider.java:71)
+	at org.keycloak.services.filters.KeycloakSecurityHeadersFilter.filter(KeycloakSecurityHeadersFilter.java:45)
+	at org.jboss.resteasy.reactive.server.handlers.ResourceResponseFilterHandler.handle(ResourceResponseFilterHandler.java:25)
+	at io.quarkus.resteasy.reactive.server.runtime.QuarkusResteasyReactiveRequestContext.invokeHandler(QuarkusResteasyReactiveRequestContext.java:192)
+	at org.jboss.resteasy.reactive.common.core.AbstractResteasyReactiveContext.run(AbstractResteasyReactiveContext.java:147)
+	at io.quarkus.vertx.core.runtime.VertxCoreRecorder$15.runWith(VertxCoreRecorder.java:645)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.doRunWith(EnhancedQueueExecutor.java:2651)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2630)
+	at org.jboss.threads.EnhancedQueueExecutor.runThreadBody(EnhancedQueueExecutor.java:1622)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1589)
+	at org.jboss.threads.DelegatingRunnable.run(DelegatingRunnable.java:11)
+	at org.jboss.threads.ThreadLocalResettingRunnable.run(ThreadLocalResettingRunnable.java:11)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+2025-11-27 13:47:50,392 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,395 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,398 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,400 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,403 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,405 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,408 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,410 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="access_denied", reason="Missing openid scope", auth_method="validate_access_token"
+2025-11-27 13:47:50,413 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="invalid_token", reason="Missing token", auth_method="validate_access_token"
+2025-11-27 13:47:50,415 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="invalid_token", reason="Missing token", auth_method="validate_access_token"
+2025-11-27 13:47:50,417 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="invalid_token", reason="Missing token", auth_method="validate_access_token"
+2025-11-27 13:47:50,419 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="invalid_token", reason="Missing token", auth_method="validate_access_token"
+2025-11-27 13:47:50,421 WARN  [org.keycloak.events] (executor-thread-1) type="USER_INFO_REQUEST_ERROR", realmId="e1db061f-8e8a-43eb-8718-3be1e065d71b", realmName="fuzz", clientId="null", userId="null", ipAddress="172.17.0.1", error="invalid_token", reason="Missing token", auth_method="validate_access_token"

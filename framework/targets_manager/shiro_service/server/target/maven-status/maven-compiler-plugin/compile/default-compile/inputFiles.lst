@@ -1,0 +1,13 @@
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/ShiroOAuthServer.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/model/AuthorizationCode.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/oauth/DiscoveryEndpoint.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/oauth/AuthorizationEndpoint.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/security/ShiroSecurityManager.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/oauth/TokenEndpoint.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/oauth/LoginServlet.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/oauth/IntrospectEndpoint.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/oauth/RevokeEndpoint.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/oauth/UserInfoEndpoint.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/model/ClientDetails.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/security/OAuthRealm.java
+/home/lab124/OAUTH_FUZZ/targets_manager/shiro_service/server/src/main/java/com/fuzz/shiro/model/AccessToken.java

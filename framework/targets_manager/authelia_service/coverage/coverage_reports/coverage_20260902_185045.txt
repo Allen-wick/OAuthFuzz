@@ -1,0 +1,43 @@
+Go Coverage Report - Authelia OAuth Fuzzing
+Generated: 20260902_185045
+======================================================================
+
+Overall Coverage: 79.73%
+Mode: hybrid
+
+=== Code Coverage ===
+Statements: 877.0/1100
+Packages: 0/0
+Methods: 0/0
+
+=== State-based Metrics ===
+Unique states: 25
+Response codes: [200, 302, 303, 400, 401]
+Endpoints hit: 18
+Error patterns: 0
+Total executions: 203
+
+=== Security Findings ===
+Security-relevant findings: 0
+Crash events: 0
+
+=== Endpoint Coverage ===
+  AuthCodeRedirect: 33 hits
+  TokenExchange: 32 hits
+  Login: 26 hits
+  AuthorizeNoPKCE: 25 hits
+  UserInfo: 24 hits
+  RefreshToken: 24 hits
+  Consent: 8 hits
+  ClientCredentials: 6 hits
+  Introspect: 5 hits
+  Authorize: 5 hits
+  IntrospectEmptyToken: 5 hits
+  AutheliaAuthorize: 2 hits
+  AutheliaFirstFactor: 2 hits
+  AuthorizeBadRedirectUri: 2 hits
+  AutheliaLogin: 1 hits
+  AuthorizePKCES256: 1 hits
+  TokenWrongClientSecret: 1 hits
+  UserInfoWrongToken: 1 hits
+

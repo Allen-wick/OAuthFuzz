@@ -1,0 +1,25 @@
+{
+  "target_type": "nodeoidc",
+  "oauth": {
+    "base_url": "http://127.0.0.1:3000/oidc",
+    "client_id": "fuzz-client",
+    "client_secret": "fuzz-secret-change-me",
+    "redirect_uri": "http://127.0.0.1:3001/callback",
+    "scope": "openid profile email",
+    "username": "fuzzuser@example.com",
+    "password": "FuzzPass2025!"
+  },
+  "nodeoidc": {
+    "container_name": "node-oidc-fuzz",
+    "image": "node-oidc-fuzz:latest",
+    "http_port": 3000,
+    "server_dir": "./targets_manager/nodeoidc_service/server",
+    "startup_timeout": 60,
+    "reuse_image": true
+  },
+  "fuzzing": {
+    "iterations": 200,
+    "differential_coverage": false,
+    "canonicalize_sequences": true
+  }
+}

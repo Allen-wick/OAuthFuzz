@@ -1,0 +1,22 @@
+{
+  "timestamp": 1785408109.4310105,
+  "target": "authelia",
+  "total_tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "inconclusive": 0,
+  "critical_failures": 0,
+  "high_failures": 0,
+  "critical_inconclusive": 0,
+  "results": [
+    {
+      "test": "V1_PAR_RESPONSE_MODE_BYPASS",
+      "severity": "MEDIUM",
+      "passed": true,
+      "timestamp": 1785408109.415559,
+      "details": {
+        "message": "PAR response mode validation working or PAR not available"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+    "target_type": "zitadel",
+    "oauth": {
+        "base_url": "http://127.0.0.1:8080",
+        "realm": "",
+        "client_id": "fuzz-client",
+        "client_secret": "fuzz-client-secret",
+        "redirect_uri": "http://127.0.0.1:7777/callback",
+        "user": "testuser",
+        "password": "Testpass123!",
+        "scope": "openid profile email offline_access"
+    },
+    "zitadel": {
+        "container_name": "zitadel-fuzz",
+        "image": "ghcr.io/zitadel/zitadel:latest",
+        "http_port": 8080,
+        "master_key": "MasterkeyNeedsToHave32Characters",
+        "health_check_url": "http://127.0.0.1:8080/healthz",
+        "coverage_enabled": false,
+        "coverage_dir": "./targets_manager/zitadel_service/coverage",
+        "environment": {
+            "ZITADEL_LOG_LEVEL": "debug"
+        }
+    },
+    "fuzzing": {
+        "iterations": 200,
+        "baseline_refresh_every": 25,
+        "coverage_cache_ttl": 15.0,
+        "differential_coverage": false,
+        "save_interesting_cases": true,
+        "canonicalize_sequences": true
+    }
+}
