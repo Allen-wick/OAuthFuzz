@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Main comparison matrix (CS revision): 3 targets x 3 tools x 5 seeds x 6h.
+"""Main comparison matrix: 3 targets x 3 tools x 5 seeds x 6h.
 
 One lane per target (fixed port map, no intra-target concurrency). Each lane
 runs, sequentially: oauthfuzz seeds 1-5, aflnet seeds 1-5, boofuzz seeds 1-5

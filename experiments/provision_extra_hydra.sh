@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Extra-lane Hydra provisioning (CS revision run_extra).
+# Extra-lane Hydra provisioning (run_extra).
 # hydra-cover:v2 has no sqlite driver compiled in (DSN=memory fails with
 # "sqlite3 support was not compiled into the binary"), so the extra lane uses
 # the battle-tested Postgres recipe from the OAuthLancer ablation lane

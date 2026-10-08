@@ -458,7 +458,7 @@ class SecurityOracles:
         """Check if PKCE is properly enforced"""
         findings = []
 
-        # Legacy-Oracle toggle (CS revision RQ2 strict-vs-legacy experiment):
+        # Legacy-Oracle toggle (strict-vs-legacy oracle precision experiment):
         # OAuth 2.0 (RFC 6749) does not require PKCE; a legacy-strict oracle
         # must not flag its absence. Enabled via OAUTH_FUZZ_ORACLE_LEGACY=1.
         import os as _os

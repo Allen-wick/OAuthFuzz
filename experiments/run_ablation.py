@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ablation matrix (CS revision): Keycloak x 5 arms x 5 seeds x 6h.
+"""Ablation matrix: Keycloak x 5 arms x 5 seeds x 6h.
 
 Arms (switch semantics implemented in core/fuzzer.py, 2026-09):
   baseline : disable_ep + disable_feedback          (random, no knowledge)

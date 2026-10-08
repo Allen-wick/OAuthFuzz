@@ -1405,7 +1405,7 @@ class GoCoverageManager:
     def _copy_coverage_from_container(self) -> bool:
         """Copy coverage profiles from Docker container to local directory"""
         try:
-            # Snapshot control (CS revision 2026-09): each mid-run snapshot
+            # Snapshot control: each mid-run snapshot
             # docker-cp's the FULL in-container counter set, which reaches
             # GBs per snapshot with real -cover builds. Set
             # OAUTH_FUZZ_GO_SNAPSHOT=0 to disable mid-run snapshots; the

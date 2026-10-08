@@ -133,8 +133,7 @@ def main():
     jm = None
     if args.mode == 'jacoco':
         import sys
-        # this copy lives at CS_OAuthFuzz/experiments/ (2 levels shallower
-        # than the OAuthLancer rq1_baselines original — repo root is 3 up)
+        # repo root is 3 levels up from this copy
         sys.path.insert(0, os.path.abspath(os.path.join(
             os.path.dirname(__file__), '..', '..', '..')))
         from core.coverage import JaCoCoManager

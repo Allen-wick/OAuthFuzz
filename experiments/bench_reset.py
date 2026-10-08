@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""RQ4 timing decomposition benchmark (resolves reviewer 2b).
+"""State-reset timing decomposition benchmark.
 
 Three separately-timed components, N sequences each:
 

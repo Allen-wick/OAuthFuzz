@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AFLNet baseline campaign against a live OAuth target (CS revision).
+# AFLNet baseline campaign against a live OAuth target.
 # One-shot relay + dumb mode (SPIKE_NOTES.md working formula; JVM/Go targets
 # cannot provide AFL forkserver coverage, so -n is the only operable mode).
 # Coverage is measured at the TARGET by coverage_sampler.py (separate proc).

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Per-target AFLNet raw-request seeds (fairness fix, CS revision 2026-09).
+"""Per-target AFLNet raw-request seeds (fairness fix).
 
 The prior campaign (OAuthLancer rq1 v1) accidentally fuzzed every lane with
 CXF-shaped seeds (aflnet_campaign.sh defaulted SEEDS=seeds_cxf). This script

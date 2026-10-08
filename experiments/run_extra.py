@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Additional-target campaigns (CS revision, Reviewer #3 request): Hydra +
+"""Additional-target campaigns: Hydra +
 Casdoor, OAuthFuzz only (no baseline comparison — discovery/generality only).
 
 Usage:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Statistics for the CS revision tables.
+"""Statistics for the comparison and ablation tables.
 
 - Exact two-sided Mann-Whitney U (5v5; ported from the OAuthLancer
   aggregate_ablation.py implementation, average-rank + recursion counts).

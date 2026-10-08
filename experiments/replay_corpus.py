@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Post-hoc corpus replay protocol (CS revision) — makes the paper's coverage
-measurement claim literal:
+"""Post-hoc corpus replay protocol — the coverage measurement
+procedure, verbatim:
 
   "Upon completion of each trial, the generated test corpora from all fuzzers
    are systematically replayed against a pristine, instrumented instance of

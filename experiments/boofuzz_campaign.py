@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Vanilla BooFuzz baseline campaign (CS revision), adapted from the
+"""Vanilla BooFuzz baseline campaign, adapted from the
 OAuthLancer rq1 baseline with two changes:
 
   1. --port CLI: lanes with isolated target instances can point at any port.
@@ -66,8 +66,7 @@ class RawCorpusLogger(IFuzzLogger):
     case: a 6h campaign at ~700 req/s would write ~15M files (~8GB), which
     neither disk nor the post-hoc replay pass can absorb. sample_n keeps
     every Nth transmitted request (uniform systematic subsample — replay
-    coverage is measured on this subsample; documented in the paper's
-    measurement protocol)."""
+    coverage is measured on this subsample)."""
 
     def __init__(self, out_dir, sample_n=200):
         self.dir = os.path.join(out_dir, 'corpus_raw')

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Strict-vs-legacy Oracle pair (RQ2 precision experiment, CS revision).
+"""Strict-vs-legacy Oracle pair (oracle precision experiment).
 
 Two Keycloak OAuthFuzz campaigns, identical in every respect except the
 oracle's compliance baseline:
@@ -7,7 +7,7 @@ oracle's compliance baseline:
   legacy_s1  : OAUTH_FUZZ_ORACLE_LEGACY=1 (RFC 6749 baseline, no PKCE alerts)
 
 2h each — the precision metric is alert-level and stabilizes long before
-coverage saturation; the budget is disclosed in the paper.
+coverage saturation.
 
 Usage: nohup python3 run_oracle_pair.py > results/oracle_pair.log 2>&1 &
 """

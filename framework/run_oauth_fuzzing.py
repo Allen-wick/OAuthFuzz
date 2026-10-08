@@ -209,7 +209,7 @@ def _signal_cleanup(signum, frame):
 
     Wall-clock-bounded campaigns end via SIGTERM; persist the session summary
     (fuzzing_summary.json + interesting_cases.jsonl) BEFORE teardown so the
-    post-hoc replay corpus survives (CS revision 2026-09)."""
+    post-hoc replay corpus survives."""
     global _current_manager, _current_fuzzer, _current_config
     if _current_manager:
         print(f"\n[Signal {signum}] Saving session summary, then cleaning up target...", flush=True)
@@ -1617,7 +1617,7 @@ def save_results_summary(fuzzer, config):
 
     # Full interesting-case dump (one JSON per line): sequence + overrides +
     # oracle hits + coverage context. This is the post-hoc corpus-replay
-    # input and the oracle-funnel raw evidence (CS revision 2026-09).
+    # input and the oracle-funnel raw evidence.
     if getattr(fuzzer, 'interesting_cases', None):
         cases_path = os.path.join(output_dir, 'interesting_cases.jsonl')
         n_written = 0

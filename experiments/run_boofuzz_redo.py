@@ -7,8 +7,7 @@ Two dedicated lanes (cxf_oauth, keycloak), seeds 1-5 sequential, DONE-skip.
 The main matrix runner has already passed these seeds (its cxf/kc lanes are
 finished), so there is no double-run risk; this runner owns them from here.
 
-Usage: cd /home/lab124/OAUTH_FUZZ && nohup python3 paper_writing/CS_OAuthFuzz/experiments/run_boofuzz_redo.py \
-          > paper_writing/CS_OAuthFuzz/experiments/results/boofuzz_redo_nohup.log 2>&1 &
+Usage: nohup python3 run_boofuzz_redo.py > results/boofuzz_redo_nohup.log 2>&1 &
 """
 import json
 import os
